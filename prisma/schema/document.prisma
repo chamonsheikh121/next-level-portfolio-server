@@ -1,0 +1,7 @@
+model FileDocument {
+  id         Int      @id @default(autoincrement())
+  title      String
+  categoryId Int?
+  blocks     Json
+  tags       String[]
+}

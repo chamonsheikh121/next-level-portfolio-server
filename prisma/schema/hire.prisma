@@ -1,0 +1,22 @@
+model HireRequest {
+  id               Int      @id @default(autoincrement())
+  name             String?
+  companyName      String?
+  email            String?
+  linkedinUrl      String?
+  notes            String?
+  projectDesc      String?
+  serviceId        Int?
+  estimateBudget   String?
+  expectedTimeline String?
+  coreFeatures     String[]
+  techSuggestion   String[]
+  files            HireRequestFile[]
+}
+
+model HireRequestFile {
+  id            Int          @id @default(autoincrement())
+  fileId        Int
+  hireRequestId Int
+  hireRequest   HireRequest  @relation(fields: [hireRequestId], references: [id])
+}

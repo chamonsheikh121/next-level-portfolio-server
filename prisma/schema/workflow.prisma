@@ -1,0 +1,5 @@
+model WorkFlow {
+  id       Int    @id @default(autoincrement())
+  title    String
+  subtitle String?
+}

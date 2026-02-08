@@ -1,0 +1,18 @@
+model NpmType {
+  id      Int           @id @default(autoincrement())
+  title   String
+  packages NpmPackage[]
+}
+
+model NpmPackage {
+  id          Int      @id @default(autoincrement())
+  npmTypeId   Int
+  npmType     NpmType @relation(fields: [npmTypeId], references: [id])
+  title       String
+  version     String
+  description String?
+  liveURL     String?
+  githubUrl   String?
+  installable String?
+  tags        String[]
+}

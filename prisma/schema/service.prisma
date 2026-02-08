@@ -1,0 +1,7 @@
+model Service {
+  id             Int      @id @default(autoincrement())
+  title          String
+  subtitle       String?
+  bulletPoints   String[]
+  coreTechStacks String[]
+}

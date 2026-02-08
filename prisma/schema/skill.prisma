@@ -1,0 +1,14 @@
+model Skill {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  description String?
+  technologies Technology[]
+}
+
+model Technology {
+  id        Int    @id @default(autoincrement())
+  name      String
+  level     Int?
+  skillId   Int
+  skill     Skill  @relation(fields: [skillId], references: [id])
+}

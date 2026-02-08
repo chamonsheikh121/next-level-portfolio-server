@@ -1,0 +1,26 @@
+model ProjectType {
+  id    Int    @id @default(autoincrement())
+  title String
+}
+
+model Project {
+  id                    Int      @id @default(autoincrement())
+  title                 String
+  subtitle              String?
+  imageURL              String?
+  frontendTechs         String[]
+  backendTechs          String[]
+  devopsTechs           String[]
+  designTechs           String[]
+  othersTechs           String[]
+  keyAccomplishments    String[]
+  projectOverview       String?
+  problems               Json
+  solutions              Json
+  solutionArchitecture   Json
+  challenges             Json
+  timeline              String?
+  role                  String?
+  totalMemberWorked     Int?
+  outcome               String?
+}

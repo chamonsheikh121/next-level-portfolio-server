@@ -1,0 +1,9 @@
+model Education {
+  id             Int      @id @default(autoincrement())
+  imageURL       String?
+  title          String
+  institution    String
+  location       String?
+  graduationDate DateTime?
+  description    String?
+}

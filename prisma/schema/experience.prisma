@@ -1,0 +1,12 @@
+model Experience {
+  id              Int      @id @default(autoincrement())
+  imageURL        String?
+  title           String
+  company         String
+  location        String?
+  startingDate    DateTime
+  endingDate      DateTime?
+  description     String?
+  keyAchievements String[]
+  technologies    String[]
+}

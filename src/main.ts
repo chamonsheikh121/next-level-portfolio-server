@@ -47,10 +47,30 @@ async function bootstrap() {
     .addBearerAuth()
     .addTag('auth', 'Authentication endpoints')
     .addTag('users', 'User management endpoints')
+    .addTag('profile', 'Profile management endpoints')
+    .addTag('skills', 'Skills and technologies endpoints')
+    .addTag('experience', 'Experience management endpoints')
+    .addTag('education', 'Education management endpoints')
+    .addTag('awards', 'Awards and achievements endpoints')
+    .addTag('social', 'Social media links endpoints')
+    .addTag('projects', 'Project portfolio endpoints')
+    .addTag('blogs', 'Blog and articles endpoints')
+    .addTag('services', 'Services offered endpoints')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup(`${apiPrefix}/docs`, app, document);
+
+  // Swagger UI v5 with built-in dark mode support
+  SwaggerModule.setup(`${apiPrefix}/docs`, app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      displayRequestDuration: true,
+      filter: true,
+      tryItOutEnabled: true,
+    },
+    customSiteTitle: 'Portfolio API Documentation',
+    customCss: '.swagger-ui .topbar { display: none }',
+  });
 
   const port = process.env.PORT || 3000;
   await app.listen(port);

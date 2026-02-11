@@ -9,6 +9,12 @@ import { UsersModule } from './modules/users/users.module';
 import { ProfileModule } from './modules/profile/profile.module';
 import { SkillAndTechModule } from './modules/skill_and_tech/skill-and-tech.module';
 import { ExperienceModule } from './modules/experience/experience.module';
+import { EducationModule } from './modules/education/education.module';
+import { AwardModule } from './modules/award/award.module';
+import { SocialModule } from './modules/social/social.module';
+import { ProjectModule } from './modules/project/project.module';
+import { BlogModule } from './modules/blog/blog.module';
+import { ServiceModule } from './modules/service/service.module';
 import { DatabaseConfig } from './config/database.config';
 import configuration from './config/configuration';
 import { PrismaModule } from './common/prisma/prisma.module';
@@ -33,6 +39,12 @@ import { JwtService } from '@nestjs/jwt';
     ProfileModule,
     SkillAndTechModule,
     ExperienceModule,
+    EducationModule,
+    AwardModule,
+    SocialModule,
+    ProjectModule,
+    BlogModule,
+    ServiceModule,
   ],
   controllers: [AppController],
   providers: [

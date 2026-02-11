@@ -7,6 +7,8 @@ import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { ProfileModule } from './modules/profile/profile.module';
+import { SkillAndTechModule } from './modules/skill_and_tech/skill-and-tech.module';
+import { ExperienceModule } from './modules/experience/experience.module';
 import { DatabaseConfig } from './config/database.config';
 import configuration from './config/configuration';
 import { PrismaModule } from './common/prisma/prisma.module';
@@ -29,6 +31,8 @@ import { JwtService } from '@nestjs/jwt';
     AuthModule,
     UsersModule,
     ProfileModule,
+    SkillAndTechModule,
+    ExperienceModule,
   ],
   controllers: [AppController],
   providers: [

@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
+import { ProfileModule } from './modules/profile/profile.module';
 import { DatabaseConfig } from './config/database.config';
 import configuration from './config/configuration';
 import { PrismaModule } from './common/prisma/prisma.module';
@@ -27,6 +28,7 @@ import { JwtService } from '@nestjs/jwt';
     EmailModule,
     AuthModule,
     UsersModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [

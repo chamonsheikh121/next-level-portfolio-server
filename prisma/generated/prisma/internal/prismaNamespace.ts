@@ -2236,7 +2236,6 @@ export type NpmPackageScalarFieldEnum = (typeof NpmPackageScalarFieldEnum)[keyof
 
 export const ProfileInformationScalarFieldEnum = {
   id: 'id',
-  email: 'email',
   name: 'name',
   subtitle: 'subtitle',
   location: 'location',

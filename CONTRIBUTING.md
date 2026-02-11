@@ -6,7 +6,7 @@ Thank you for your interest in contributing to this project!
 
 1. Fork the repository
 2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/next_level_portfolio_server.git`
-3. Install dependencies: `npm install`
+3. Install dependencies: `pnpm install`
 4. Create a new branch: `git checkout -b feature/your-feature-name`
 
 ## 📝 Development Guidelines
@@ -14,8 +14,8 @@ Thank you for your interest in contributing to this project!
 ### Code Style
 
 - Follow the existing code style
-- Run `npm run lint` before committing
-- Run `npm run format` to format code automatically
+- Run `pnpm lint` before committing
+- Run `pnpm format` to format code automatically
 - Write meaningful commit messages
 
 ### Commit Messages
@@ -32,9 +32,9 @@ Use conventional commit format:
 ### Testing
 
 - Write tests for new features
-- Ensure all tests pass: `npm run test`
-- Run E2E tests: `npm run test:e2e`
-- Check coverage: `npm run test:cov`
+- Ensure all tests pass: `pnpm test`
+- Run E2E tests: `pnpm test:e2e`
+- Check coverage: `pnpm test:cov`
 
 ### Pull Requests
 

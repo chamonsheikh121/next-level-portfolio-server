@@ -1,6 +1,5 @@
 model ProfileInformation {
   id            Int    @id @default(autoincrement())
-  email         String
   name          String
   subtitle      String?
   location      String?

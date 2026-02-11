@@ -36,7 +36,6 @@ export type ProfileInformationSumAggregateOutputType = {
 
 export type ProfileInformationMinAggregateOutputType = {
   id: number | null
-  email: string | null
   name: string | null
   subtitle: string | null
   location: string | null
@@ -50,7 +49,6 @@ export type ProfileInformationMinAggregateOutputType = {
 
 export type ProfileInformationMaxAggregateOutputType = {
   id: number | null
-  email: string | null
   name: string | null
   subtitle: string | null
   location: string | null
@@ -64,7 +62,6 @@ export type ProfileInformationMaxAggregateOutputType = {
 
 export type ProfileInformationCountAggregateOutputType = {
   id: number
-  email: number
   name: number
   subtitle: number
   location: number
@@ -88,7 +85,6 @@ export type ProfileInformationSumAggregateInputType = {
 
 export type ProfileInformationMinAggregateInputType = {
   id?: true
-  email?: true
   name?: true
   subtitle?: true
   location?: true
@@ -102,7 +98,6 @@ export type ProfileInformationMinAggregateInputType = {
 
 export type ProfileInformationMaxAggregateInputType = {
   id?: true
-  email?: true
   name?: true
   subtitle?: true
   location?: true
@@ -116,7 +111,6 @@ export type ProfileInformationMaxAggregateInputType = {
 
 export type ProfileInformationCountAggregateInputType = {
   id?: true
-  email?: true
   name?: true
   subtitle?: true
   location?: true
@@ -217,7 +211,6 @@ export type ProfileInformationGroupByArgs<ExtArgs extends runtime.Types.Extensio
 
 export type ProfileInformationGroupByOutputType = {
   id: number
-  email: string
   name: string
   subtitle: string | null
   location: string | null
@@ -254,7 +247,6 @@ export type ProfileInformationWhereInput = {
   OR?: Prisma.ProfileInformationWhereInput[]
   NOT?: Prisma.ProfileInformationWhereInput | Prisma.ProfileInformationWhereInput[]
   id?: Prisma.IntFilter<"ProfileInformation"> | number
-  email?: Prisma.StringFilter<"ProfileInformation"> | string
   name?: Prisma.StringFilter<"ProfileInformation"> | string
   subtitle?: Prisma.StringNullableFilter<"ProfileInformation"> | string | null
   location?: Prisma.StringNullableFilter<"ProfileInformation"> | string | null
@@ -268,7 +260,6 @@ export type ProfileInformationWhereInput = {
 
 export type ProfileInformationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  email?: Prisma.SortOrder
   name?: Prisma.SortOrder
   subtitle?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -285,7 +276,6 @@ export type ProfileInformationWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ProfileInformationWhereInput | Prisma.ProfileInformationWhereInput[]
   OR?: Prisma.ProfileInformationWhereInput[]
   NOT?: Prisma.ProfileInformationWhereInput | Prisma.ProfileInformationWhereInput[]
-  email?: Prisma.StringFilter<"ProfileInformation"> | string
   name?: Prisma.StringFilter<"ProfileInformation"> | string
   subtitle?: Prisma.StringNullableFilter<"ProfileInformation"> | string | null
   location?: Prisma.StringNullableFilter<"ProfileInformation"> | string | null
@@ -299,7 +289,6 @@ export type ProfileInformationWhereUniqueInput = Prisma.AtLeast<{
 
 export type ProfileInformationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  email?: Prisma.SortOrder
   name?: Prisma.SortOrder
   subtitle?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -321,7 +310,6 @@ export type ProfileInformationScalarWhereWithAggregatesInput = {
   OR?: Prisma.ProfileInformationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ProfileInformationScalarWhereWithAggregatesInput | Prisma.ProfileInformationScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"ProfileInformation"> | number
-  email?: Prisma.StringWithAggregatesFilter<"ProfileInformation"> | string
   name?: Prisma.StringWithAggregatesFilter<"ProfileInformation"> | string
   subtitle?: Prisma.StringNullableWithAggregatesFilter<"ProfileInformation"> | string | null
   location?: Prisma.StringNullableWithAggregatesFilter<"ProfileInformation"> | string | null
@@ -334,7 +322,6 @@ export type ProfileInformationScalarWhereWithAggregatesInput = {
 }
 
 export type ProfileInformationCreateInput = {
-  email: string
   name: string
   subtitle?: string | null
   location?: string | null
@@ -348,7 +335,6 @@ export type ProfileInformationCreateInput = {
 
 export type ProfileInformationUncheckedCreateInput = {
   id?: number
-  email: string
   name: string
   subtitle?: string | null
   location?: string | null
@@ -361,7 +347,6 @@ export type ProfileInformationUncheckedCreateInput = {
 }
 
 export type ProfileInformationUpdateInput = {
-  email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -375,7 +360,6 @@ export type ProfileInformationUpdateInput = {
 
 export type ProfileInformationUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -389,7 +373,6 @@ export type ProfileInformationUncheckedUpdateInput = {
 
 export type ProfileInformationCreateManyInput = {
   id?: number
-  email: string
   name: string
   subtitle?: string | null
   location?: string | null
@@ -402,7 +385,6 @@ export type ProfileInformationCreateManyInput = {
 }
 
 export type ProfileInformationUpdateManyMutationInput = {
-  email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -416,7 +398,6 @@ export type ProfileInformationUpdateManyMutationInput = {
 
 export type ProfileInformationUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   subtitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -430,7 +411,6 @@ export type ProfileInformationUncheckedUpdateManyInput = {
 
 export type ProfileInformationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  email?: Prisma.SortOrder
   name?: Prisma.SortOrder
   subtitle?: Prisma.SortOrder
   location?: Prisma.SortOrder
@@ -448,7 +428,6 @@ export type ProfileInformationAvgOrderByAggregateInput = {
 
 export type ProfileInformationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  email?: Prisma.SortOrder
   name?: Prisma.SortOrder
   subtitle?: Prisma.SortOrder
   location?: Prisma.SortOrder
@@ -462,7 +441,6 @@ export type ProfileInformationMaxOrderByAggregateInput = {
 
 export type ProfileInformationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  email?: Prisma.SortOrder
   name?: Prisma.SortOrder
   subtitle?: Prisma.SortOrder
   location?: Prisma.SortOrder
@@ -482,7 +460,6 @@ export type ProfileInformationSumOrderByAggregateInput = {
 
 export type ProfileInformationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  email?: boolean
   name?: boolean
   subtitle?: boolean
   location?: boolean
@@ -496,7 +473,6 @@ export type ProfileInformationSelect<ExtArgs extends runtime.Types.Extensions.In
 
 export type ProfileInformationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  email?: boolean
   name?: boolean
   subtitle?: boolean
   location?: boolean
@@ -510,7 +486,6 @@ export type ProfileInformationSelectCreateManyAndReturn<ExtArgs extends runtime.
 
 export type ProfileInformationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  email?: boolean
   name?: boolean
   subtitle?: boolean
   location?: boolean
@@ -524,7 +499,6 @@ export type ProfileInformationSelectUpdateManyAndReturn<ExtArgs extends runtime.
 
 export type ProfileInformationSelectScalar = {
   id?: boolean
-  email?: boolean
   name?: boolean
   subtitle?: boolean
   location?: boolean
@@ -536,14 +510,13 @@ export type ProfileInformationSelectScalar = {
   workingHour?: boolean
 }
 
-export type ProfileInformationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "subtitle" | "location" | "bio" | "description" | "resumeURL" | "contactEmail" | "phone" | "workingHour", ExtArgs["result"]["profileInformation"]>
+export type ProfileInformationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "subtitle" | "location" | "bio" | "description" | "resumeURL" | "contactEmail" | "phone" | "workingHour", ExtArgs["result"]["profileInformation"]>
 
 export type $ProfileInformationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ProfileInformation"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
-    email: string
     name: string
     subtitle: string | null
     location: string | null
@@ -977,7 +950,6 @@ export interface Prisma__ProfileInformationClient<T, Null = never, ExtArgs exten
  */
 export interface ProfileInformationFieldRefs {
   readonly id: Prisma.FieldRef<"ProfileInformation", 'Int'>
-  readonly email: Prisma.FieldRef<"ProfileInformation", 'String'>
   readonly name: Prisma.FieldRef<"ProfileInformation", 'String'>
   readonly subtitle: Prisma.FieldRef<"ProfileInformation", 'String'>
   readonly location: Prisma.FieldRef<"ProfileInformation", 'String'>

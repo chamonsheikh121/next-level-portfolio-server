@@ -21,7 +21,7 @@ A professional, production-ready NestJS backend server with authentication, data
 
 - Node.js (v18 or higher)
 - PostgreSQL (v12 or higher)
-- npm or yarn
+- pnpm (recommended) or npm
 
 ## 🛠️ Installation
 
@@ -33,7 +33,7 @@ A professional, production-ready NestJS backend server with authentication, data
 
 2. **Install dependencies**:
    ```bash
-   npm install
+   pnpm install
    ```
 
 3. **Set up environment variables**:
@@ -51,18 +51,18 @@ A professional, production-ready NestJS backend server with authentication, data
 
 ### Development Mode
 ```bash
-npm run start:dev
+pnpm dev
 ```
 
 ### Production Mode
 ```bash
-npm run build
-npm run start:prod
+pnpm build
+pnpm start:prod
 ```
 
 ### Debug Mode
 ```bash
-npm run start:debug
+pnpm start:debug
 ```
 
 ## 🐳 Docker
@@ -105,16 +105,16 @@ http://localhost:3000/api/docs
 
 ```bash
 # Unit tests
-npm run test
+pnpm test
 
 # E2E tests
-npm run test:e2e
+pnpm test:e2e
 
 # Test coverage
-npm run test:cov
+pnpm test:cov
 
 # Watch mode
-npm run test:watch
+pnpm test:watch
 ```
 
 ## 📁 Project Structure
@@ -179,17 +179,17 @@ src/
 
 ```bash
 # Linting
-npm run lint
+pnpm lint
 
 # Formatting
-npm run format
+pnpm format
 ```
 
 ## 🚀 Deployment
 
 ### Production Build
 ```bash
-npm run build
+pnpm build
 ```
 
 The compiled files will be in the `dist/` directory.

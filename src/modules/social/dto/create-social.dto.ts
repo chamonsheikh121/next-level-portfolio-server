@@ -17,12 +17,4 @@ export class CreateSocialDto {
   @IsUrl()
   @IsNotEmpty()
   url: string;
-
-  @ApiPropertyOptional({
-    description: 'Image URL for the platform icon or logo',
-    example: 'https://example.com/github-icon.png',
-  })
-  @IsString()
-  @IsOptional()
-  imageURL?: string;
 }

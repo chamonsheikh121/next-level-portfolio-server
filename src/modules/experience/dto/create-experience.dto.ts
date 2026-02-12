@@ -3,10 +3,6 @@ import { IsNotEmpty, IsOptional, IsString, IsDateString, IsArray } from 'class-v
 import { Transform } from 'class-transformer';
 
 export class CreateExperienceDto {
-  // Note: imageURL is automatically set from the uploaded file via multipart/form-data
-  // Do not send this field in the request body
-  imageURL?: string;
-
   @ApiProperty({ example: 'Senior Full Stack Developer' })
   @IsNotEmpty()
   @IsString()

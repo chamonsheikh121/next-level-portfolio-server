@@ -8,8 +8,19 @@ import {
   Delete,
   ParseIntPipe,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiParam,
+  ApiConsumes,
+  ApiBody,
+} from '@nestjs/swagger';
 import { BlogService } from './blog.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
@@ -27,14 +38,55 @@ export class BlogController {
   @Post()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create a new blog post' })
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Create a new blog post with optional image upload' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        image: {
+          type: 'string',
+          format: 'binary',
+          description: 'Blog featured image (optional)',
+        },
+        title: { type: 'string', example: 'Getting Started with NestJS' },
+        description: {
+          type: 'string',
+          example: 'Learn how to build scalable server-side applications',
+        },
+        categoryId: { type: 'number', example: 1 },
+        blocks: {
+          type: 'string',
+          example: JSON.stringify({
+            time: 1635603431943,
+            blocks: [
+              { type: 'header', data: { text: 'Introduction to NestJS', level: 2 } },
+              { type: 'paragraph', data: { text: 'NestJS is a progressive framework...' } },
+            ],
+            version: '2.22.2',
+          }),
+          description: 'Editor.js content as JSON string',
+        },
+        tags: {
+          type: 'string',
+          example: '["NestJS", "TypeScript", "Backend"]',
+          description: 'Tags as JSON array string or comma-separated',
+        },
+      },
+      required: ['title', 'categoryId', 'blocks'],
+    },
+  })
   @ApiResponse({
     status: 201,
     description: 'Blog created successfully',
     schema: {
       example: {
         id: 1,
+        imageURL:
+          'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/blogs/blog-image.png',
         title: 'Getting Started with NestJS',
+        description: 'Learn how to build scalable server-side applications',
         categoryId: 1,
         category: {
           id: 1,
@@ -92,8 +144,8 @@ export class BlogController {
       },
     },
   })
-  createBlog(@Body() createBlogDto: CreateBlogDto) {
-    return this.blogService.createBlog(createBlogDto);
+  createBlog(@Body() createBlogDto: CreateBlogDto, @UploadedFile() file?: Express.Multer.File) {
+    return this.blogService.createBlog(createBlogDto, file);
   }
 
   @Get()
@@ -204,15 +256,33 @@ export class BlogController {
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update blog post' })
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Update blog post with optional image upload' })
   @ApiParam({ name: 'id', description: 'Blog ID', type: Number })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        image: { type: 'string', format: 'binary' },
+        title: { type: 'string' },
+        description: { type: 'string' },
+        categoryId: { type: 'number' },
+        blocks: { type: 'string', description: 'Editor.js content as JSON string' },
+        tags: { type: 'string', description: 'Tags as JSON array string or comma-separated' },
+      },
+    },
+  })
   @ApiResponse({
     status: 200,
     description: 'Blog updated successfully',
     schema: {
       example: {
         id: 1,
+        imageURL:
+          'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/blogs/blog-updated.png',
         title: 'Getting Started with NestJS (Updated)',
+        description: 'Learn how to build scalable applications',
         categoryId: 1,
         category: {
           id: 1,
@@ -255,8 +325,12 @@ export class BlogController {
       },
     },
   })
-  updateBlog(@Param('id', ParseIntPipe) id: number, @Body() updateBlogDto: UpdateBlogDto) {
-    return this.blogService.updateBlog(id, updateBlogDto);
+  updateBlog(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateBlogDto: UpdateBlogDto,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    return this.blogService.updateBlog(id, updateBlogDto, file);
   }
 
   @Delete(':id')

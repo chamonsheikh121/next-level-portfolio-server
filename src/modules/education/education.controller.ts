@@ -68,15 +68,11 @@ export class EducationController {
           type: 'string',
           example: 'Graduated with honors. GPA: 3.9/4.0',
         },
-        imageURL: {
-          type: 'string',
-          example: 'https://example.com/logo.png',
-          description: 'Alternative to uploading image file',
-        },
       },
       required: ['title', 'institution'],
     },
   })
+  
   @ApiResponse({
     status: 201,
     description: 'Education record created successfully',
@@ -227,11 +223,6 @@ export class EducationController {
         description: {
           type: 'string',
           example: 'Graduated with honors. GPA: 3.9/4.0',
-        },
-        imageURL: {
-          type: 'string',
-          example: 'https://example.com/logo.png',
-          description: 'Alternative to uploading image file',
         },
       },
     },

@@ -18,7 +18,7 @@ export class AwardService {
 
   async create(createAwardDto: CreateAwardDto, file?: Express.Multer.File) {
     try {
-      let imageURL = createAwardDto.imageURL;
+      let imageURL: string | undefined;
 
       // Upload image to Cloudinary if file is provided
       if (file) {
@@ -81,7 +81,7 @@ export class AwardService {
       // Check if award exists
       const existingAward = await this.findOne(id);
 
-      let imageURL = updateAwardDto.imageURL;
+      let imageURL: string | undefined;
 
       // Upload new image to Cloudinary if file is provided
       if (file) {

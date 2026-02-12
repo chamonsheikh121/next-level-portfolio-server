@@ -3,10 +3,6 @@ import { IsOptional, IsString, IsDateString, IsArray } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class UpdateExperienceDto {
-  // Note: imageURL is automatically set from the uploaded file via multipart/form-data
-  // Do not send this field in the request body
-  imageURL?: string;
-
   @ApiProperty({ required: false, example: 'Senior Full Stack Developer' })
   @IsOptional()
   @IsString()

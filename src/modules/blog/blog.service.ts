@@ -5,6 +5,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { PrismaService } from '../../common/prisma/prisma.service';
+import { CloudinaryService } from '../../common/cloudinary/cloudinary.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import { CreateBlogCategoryDto } from './dto/create-blog-category.dto';
@@ -12,11 +13,22 @@ import { UpdateBlogCategoryDto } from './dto/update-blog-category.dto';
 
 @Injectable()
 export class BlogService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
 
   // Blog CRUD operations
-  async createBlog(createBlogDto: CreateBlogDto) {
+  async createBlog(createBlogDto: CreateBlogDto, file?: Express.Multer.File) {
     try {
+      let imageURL: string | undefined;
+
+      // Upload image to Cloudinary if file is provided
+      if (file) {
+        const uploadResult = await this.cloudinaryService.uploadFile(file, 'portfolio/blogs');
+        imageURL = uploadResult.secure_url;
+      }
+
       // Check if category exists
       const category = await this.prisma.client.blogCategory.findUnique({
         where: { id: createBlogDto.categoryId },
@@ -29,6 +41,7 @@ export class BlogService {
       const blog = await this.prisma.client.blog.create({
         data: {
           ...createBlogDto,
+          imageURL,
           tags: createBlogDto.tags || [],
         },
         include: {
@@ -38,7 +51,7 @@ export class BlogService {
 
       return blog;
     } catch (error) {
-      if (error instanceof NotFoundException) {
+      if (error instanceof NotFoundException || error instanceof BadRequestException) {
         throw error;
       }
       throw new InternalServerErrorException(`Failed to create blog: ${error.message}`);
@@ -84,10 +97,27 @@ export class BlogService {
     }
   }
 
-  async updateBlog(id: number, updateBlogDto: UpdateBlogDto) {
+  async updateBlog(id: number, updateBlogDto: UpdateBlogDto, file?: Express.Multer.File) {
     try {
       // Check if blog exists
-      await this.findOneBlog(id);
+      const existingBlog = await this.findOneBlog(id);
+
+      let imageURL: string | undefined;
+
+      // Upload new image to Cloudinary if file is provided
+      if (file) {
+        const uploadResult = await this.cloudinaryService.uploadFile(file, 'portfolio/blogs');
+        imageURL = uploadResult.secure_url;
+
+        // Delete old image from Cloudinary if it exists
+        if (existingBlog.imageURL) {
+          try {
+            await this.cloudinaryService.deleteFile(existingBlog.imageURL);
+          } catch (error) {
+            console.error('Failed to delete old image:', error.message);
+          }
+        }
+      }
 
       // If categoryId is provided, check if category exists
       if (updateBlogDto.categoryId) {
@@ -104,7 +134,10 @@ export class BlogService {
 
       const updatedBlog = await this.prisma.client.blog.update({
         where: { id },
-        data: updateBlogDto,
+        data: {
+          ...updateBlogDto,
+          imageURL,
+        },
         include: {
           category: true,
         },
@@ -112,7 +145,7 @@ export class BlogService {
 
       return updatedBlog;
     } catch (error) {
-      if (error instanceof NotFoundException) {
+      if (error instanceof NotFoundException || error instanceof BadRequestException) {
         throw error;
       }
       throw new InternalServerErrorException(`Failed to update blog: ${error.message}`);
@@ -122,7 +155,16 @@ export class BlogService {
   async removeBlog(id: number) {
     try {
       // Check if blog exists
-      await this.findOneBlog(id);
+      const existingBlog = await this.findOneBlog(id);
+
+      // Delete image from Cloudinary if it exists
+      if (existingBlog.imageURL) {
+        try {
+          await this.cloudinaryService.deleteFile(existingBlog.imageURL);
+        } catch (error) {
+          console.error('Failed to delete image:', error.message);
+        }
+      }
 
       await this.prisma.client.blog.delete({
         where: { id },

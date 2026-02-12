@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
-import { BlogService } from './blog.service';
-import { BlogController } from './blog.controller';
+import { ReviewService } from './review.service';
+import { ReviewController } from './review.controller';
 import { PrismaModule } from '../../common/prisma/prisma.module';
 import { CloudinaryModule } from '../../common/cloudinary/cloudinary.module';
 import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [PrismaModule, CloudinaryModule],
-  controllers: [BlogController],
-  providers: [BlogService, JwtService],
-  exports: [BlogService],
+  controllers: [ReviewController],
+  providers: [ReviewService, JwtService],
+  exports: [ReviewService],
 })
-export class BlogModule {}
+export class ReviewModule {}

@@ -41,12 +41,4 @@ export class CreateAwardDto {
   @IsString()
   @IsOptional()
   description?: string;
-
-  @ApiPropertyOptional({
-    description: 'Image URL for the award certificate or trophy',
-    example: 'https://example.com/award-certificate.png',
-  })
-  @IsString()
-  @IsOptional()
-  imageURL?: string;
 }

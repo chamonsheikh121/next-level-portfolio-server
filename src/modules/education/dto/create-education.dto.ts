@@ -41,12 +41,4 @@ export class CreateEducationDto {
   @IsString()
   @IsOptional()
   description?: string;
-
-  @ApiPropertyOptional({
-    description: 'Image URL for the institution logo or certificate',
-    example: 'https://example.com/logo.png',
-  })
-  @IsString()
-  @IsOptional()
-  imageURL?: string;
 }

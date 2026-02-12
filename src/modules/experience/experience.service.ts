@@ -31,7 +31,7 @@ export class ExperienceService {
 
     const experience = await this.prismaService.client.experience.create({
       data: {
-        imageURL: imageURL || createExperienceDto.imageURL,
+        imageURL,
         title: createExperienceDto.title,
         company: createExperienceDto.company,
         location: createExperienceDto.location,

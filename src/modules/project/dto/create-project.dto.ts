@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsOptional, IsArray, IsInt, IsObject, Min } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CreateProjectDto {
   @ApiProperty({
@@ -19,20 +20,25 @@ export class CreateProjectDto {
   subtitle?: string;
 
   @ApiPropertyOptional({
-    description: 'Project image URL',
-    example: 'https://example.com/project-image.png',
-  })
-  @IsString()
-  @IsOptional()
-  imageURL?: string;
-
-  @ApiPropertyOptional({
     description: 'Frontend technologies used',
     example: ['React', 'TypeScript', 'Tailwind CSS'],
     type: [String],
   })
-  @IsArray()
   @IsOptional()
+  @Transform(({ value }) => {
+    if (!value) return [];
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string') {
+      try {
+        const parsed = JSON.parse(value);
+        return Array.isArray(parsed) ? parsed : [value];
+      } catch {
+        return value.split(',').map(item => item.trim()).filter(Boolean);
+      }
+    }
+    return [value];
+  })
+  @IsArray()
   frontendTechs?: string[];
 
   @ApiPropertyOptional({
@@ -40,8 +46,21 @@ export class CreateProjectDto {
     example: ['Node.js', 'NestJS', 'PostgreSQL'],
     type: [String],
   })
-  @IsArray()
   @IsOptional()
+  @Transform(({ value }) => {
+    if (!value) return [];
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string') {
+      try {
+        const parsed = JSON.parse(value);
+        return Array.isArray(parsed) ? parsed : [value];
+      } catch {
+        return value.split(',').map(item => item.trim()).filter(Boolean);
+      }
+    }
+    return [value];
+  })
+  @IsArray()
   backendTechs?: string[];
 
   @ApiPropertyOptional({
@@ -49,8 +68,21 @@ export class CreateProjectDto {
     example: ['Docker', 'AWS', 'GitHub Actions'],
     type: [String],
   })
-  @IsArray()
   @IsOptional()
+  @Transform(({ value }) => {
+    if (!value) return [];
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string') {
+      try {
+        const parsed = JSON.parse(value);
+        return Array.isArray(parsed) ? parsed : [value];
+      } catch {
+        return value.split(',').map(item => item.trim()).filter(Boolean);
+      }
+    }
+    return [value];
+  })
+  @IsArray()
   devopsTechs?: string[];
 
   @ApiPropertyOptional({
@@ -58,8 +90,21 @@ export class CreateProjectDto {
     example: ['Figma', 'Adobe XD'],
     type: [String],
   })
-  @IsArray()
   @IsOptional()
+  @Transform(({ value }) => {
+    if (!value) return [];
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string') {
+      try {
+        const parsed = JSON.parse(value);
+        return Array.isArray(parsed) ? parsed : [value];
+      } catch {
+        return value.split(',').map(item => item.trim()).filter(Boolean);
+      }
+    }
+    return [value];
+  })
+  @IsArray()
   designTechs?: string[];
 
   @ApiPropertyOptional({
@@ -67,8 +112,21 @@ export class CreateProjectDto {
     example: ['Redis', 'Elasticsearch'],
     type: [String],
   })
-  @IsArray()
   @IsOptional()
+  @Transform(({ value }) => {
+    if (!value) return [];
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string') {
+      try {
+        const parsed = JSON.parse(value);
+        return Array.isArray(parsed) ? parsed : [value];
+      } catch {
+        return value.split(',').map(item => item.trim()).filter(Boolean);
+      }
+    }
+    return [value];
+  })
+  @IsArray()
   othersTechs?: string[];
 
   @ApiPropertyOptional({
@@ -76,8 +134,21 @@ export class CreateProjectDto {
     example: ['Increased sales by 40%', 'Reduced load time by 60%'],
     type: [String],
   })
-  @IsArray()
   @IsOptional()
+  @Transform(({ value }) => {
+    if (!value) return [];
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string') {
+      try {
+        const parsed = JSON.parse(value);
+        return Array.isArray(parsed) ? parsed : [value];
+      } catch {
+        return value.split(',').map(item => item.trim()).filter(Boolean);
+      }
+    }
+    return [value];
+  })
+  @IsArray()
   keyAccomplishments?: string[];
 
   @ApiPropertyOptional({
@@ -92,8 +163,20 @@ export class CreateProjectDto {
     description: 'Problems faced during the project',
     example: { scalability: 'High traffic handling', performance: 'Slow queries' },
   })
-  @IsObject()
   @IsOptional()
+  @Transform(({ value }) => {
+    if (!value) return {};
+    if (typeof value === 'object' && !Array.isArray(value)) return value;
+    if (typeof value === 'string') {
+      try {
+        return JSON.parse(value);
+      } catch {
+        return {};
+      }
+    }
+    return {};
+  })
+  @IsObject()
   problems?: any;
 
   @ApiPropertyOptional({
@@ -103,24 +186,60 @@ export class CreateProjectDto {
       performance: 'Optimized database queries',
     },
   })
-  @IsObject()
   @IsOptional()
+  @Transform(({ value }) => {
+    if (!value) return {};
+    if (typeof value === 'object' && !Array.isArray(value)) return value;
+    if (typeof value === 'string') {
+      try {
+        return JSON.parse(value);
+      } catch {
+        return {};
+      }
+    }
+    return {};
+  })
+  @IsObject()
   solutions?: any;
 
   @ApiPropertyOptional({
     description: 'Solution architecture details',
     example: { architecture: 'Microservices', database: 'PostgreSQL with Redis cache' },
   })
-  @IsObject()
   @IsOptional()
+  @Transform(({ value }) => {
+    if (!value) return {};
+    if (typeof value === 'object' && !Array.isArray(value)) return value;
+    if (typeof value === 'string') {
+      try {
+        return JSON.parse(value);
+      } catch {
+        return {};
+      }
+    }
+    return {};
+  })
+  @IsObject()
   solutionArchitecture?: any;
 
   @ApiPropertyOptional({
     description: 'Challenges encountered',
     example: { technical: 'Complex payment integration', business: 'Tight deadlines' },
   })
-  @IsObject()
   @IsOptional()
+  @Transform(({ value }) => {
+    if (!value) return {};
+    if (typeof value === 'object' && !Array.isArray(value)) return value;
+    if (typeof value === 'string') {
+      try {
+        return JSON.parse(value);
+      } catch {
+        return {};
+      }
+    }
+    return {};
+  })
+  @IsObject()
   challenges?: any;
 
   @ApiPropertyOptional({
@@ -143,9 +262,14 @@ export class CreateProjectDto {
     description: 'Total team members worked on project',
     example: 5,
   })
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (typeof value === 'number') return value;
+    if (typeof value === 'string') return parseInt(value, 10);
+    return value;
+  })
   @IsInt()
   @Min(1)
-  @IsOptional()
   totalMemberWorked?: number;
 
   @ApiPropertyOptional({

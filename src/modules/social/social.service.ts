@@ -18,7 +18,7 @@ export class SocialService {
 
   async create(createSocialDto: CreateSocialDto, file?: Express.Multer.File) {
     try {
-      let imageURL = createSocialDto.imageURL;
+      let imageURL: string | undefined;
 
       // Upload image to Cloudinary if file is provided
       if (file) {
@@ -80,7 +80,7 @@ export class SocialService {
       // Check if social account exists
       const existingSocial = await this.findOne(id);
 
-      let imageURL = updateSocialDto.imageURL;
+      let imageURL: string | undefined;
 
       // Upload new image to Cloudinary if file is provided
       if (file) {

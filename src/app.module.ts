@@ -15,6 +15,10 @@ import { SocialModule } from './modules/social/social.module';
 import { ProjectModule } from './modules/project/project.module';
 import { BlogModule } from './modules/blog/blog.module';
 import { ServiceModule } from './modules/service/service.module';
+import { ReviewModule } from './modules/review/review.module';
+import { NpmModule } from './modules/npm/npm.module';
+import { FaqModule } from './modules/faq/faq.module';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { DatabaseConfig } from './config/database.config';
 import configuration from './config/configuration';
 import { PrismaModule } from './common/prisma/prisma.module';
@@ -45,6 +49,10 @@ import { JwtService } from '@nestjs/jwt';
     ProjectModule,
     BlogModule,
     ServiceModule,
+    ReviewModule,
+    NpmModule,
+    FaqModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [

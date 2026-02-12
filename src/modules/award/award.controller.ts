@@ -68,11 +68,6 @@ export class AwardController {
           type: 'string',
           example: 'Recognized for outstanding contributions to open-source projects',
         },
-        imageURL: {
-          type: 'string',
-          example: 'https://example.com/award-certificate.png',
-          description: 'Alternative to uploading image file',
-        },
       },
       required: ['title'],
     },
@@ -224,11 +219,6 @@ export class AwardController {
         description: {
           type: 'string',
           example: 'Recognized for outstanding contributions to open-source projects',
-        },
-        imageURL: {
-          type: 'string',
-          example: 'https://example.com/award-certificate.png',
-          description: 'Alternative to uploading image file',
         },
       },
     },

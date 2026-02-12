@@ -55,11 +55,6 @@ export class SocialController {
           type: 'string',
           example: 'https://github.com/johndoe',
         },
-        imageURL: {
-          type: 'string',
-          example: 'https://example.com/github-icon.png',
-          description: 'Alternative to uploading image file',
-        },
       },
       required: ['title', 'url'],
     },
@@ -193,11 +188,6 @@ export class SocialController {
         url: {
           type: 'string',
           example: 'https://github.com/johndoe',
-        },
-        imageURL: {
-          type: 'string',
-          example: 'https://example.com/github-icon.png',
-          description: 'Alternative to uploading image file',
         },
       },
     },

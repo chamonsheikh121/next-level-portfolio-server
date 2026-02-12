@@ -18,7 +18,7 @@ export class EducationService {
 
   async create(createEducationDto: CreateEducationDto, file?: Express.Multer.File) {
     try {
-      let imageURL = createEducationDto.imageURL;
+      let imageURL: string | undefined;
 
       // Upload image to Cloudinary if file is provided
       if (file) {
@@ -83,7 +83,7 @@ export class EducationService {
       // Check if education exists
       const existingEducation = await this.findOne(id);
 
-      let imageURL = updateEducationDto.imageURL;
+      let imageURL: string | undefined;
 
       // Upload new image to Cloudinary if file is provided
       if (file) {

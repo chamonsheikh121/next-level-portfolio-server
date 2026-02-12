@@ -1,0 +1,32 @@
+model Visitor {
+    id           String   @id @default(uuid())
+    firstVisitAt DateTime @default(now())
+    lastVisitAt  DateTime @updatedAt
+    userAgent    String?
+    ipAddress    String?
+
+    pageViews PageView[]
+}
+
+model Page {
+    id        Int      @id @default(autoincrement())
+    slug      String   @unique
+    title     String?
+    createdAt DateTime @default(now())
+
+    pageViews PageView[]
+}
+
+model PageView {
+    id        BigInt   @id @default(autoincrement())
+    visitorId String
+    pageId    Int
+    viewedAt  DateTime @default(now())
+
+    visitor Visitor @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+    page    Page    @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+    @@index([pageId])
+    @@index([visitorId])
+    @@index([viewedAt])
+}

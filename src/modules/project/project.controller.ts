@@ -49,7 +49,6 @@ export class ProjectController {
         },
         title: { type: 'string', example: 'E-Commerce Platform' },
         subtitle: { type: 'string', example: 'Full-stack online shopping solution' },
-        imageURL: { type: 'string', example: 'https://example.com/project-image.png' },
         frontendTechs: {
           type: 'array',
           items: { type: 'string' },
@@ -145,46 +144,6 @@ export class ProjectController {
     },
   })
   create(@Body() createProjectDto: CreateProjectDto, @UploadedFile() file?: Express.Multer.File) {
-    // Parse strings from multipart/form-data
-    // Arrays can be comma-separated strings or JSON arrays
-    if (typeof createProjectDto.frontendTechs === 'string') {
-      createProjectDto.frontendTechs = createProjectDto.frontendTechs
-        .split(',')
-        .map((s) => s.trim());
-    }
-    if (typeof createProjectDto.backendTechs === 'string') {
-      createProjectDto.backendTechs = createProjectDto.backendTechs.split(',').map((s) => s.trim());
-    }
-    if (typeof createProjectDto.devopsTechs === 'string') {
-      createProjectDto.devopsTechs = createProjectDto.devopsTechs.split(',').map((s) => s.trim());
-    }
-    if (typeof createProjectDto.designTechs === 'string') {
-      createProjectDto.designTechs = createProjectDto.designTechs.split(',').map((s) => s.trim());
-    }
-    if (typeof createProjectDto.othersTechs === 'string') {
-      createProjectDto.othersTechs = createProjectDto.othersTechs.split(',').map((s) => s.trim());
-    }
-    if (typeof createProjectDto.keyAccomplishments === 'string') {
-      createProjectDto.keyAccomplishments = createProjectDto.keyAccomplishments
-        .split(',')
-        .map((s) => s.trim());
-    }
-    // Objects must be JSON strings
-    if (typeof createProjectDto.problems === 'string') {
-      createProjectDto.problems = JSON.parse(createProjectDto.problems);
-    }
-    if (typeof createProjectDto.solutions === 'string') {
-      createProjectDto.solutions = JSON.parse(createProjectDto.solutions);
-    }
-    if (typeof createProjectDto.solutionArchitecture === 'string') {
-      createProjectDto.solutionArchitecture = JSON.parse(createProjectDto.solutionArchitecture);
-    }
-    if (typeof createProjectDto.challenges === 'string') {
-      createProjectDto.challenges = JSON.parse(createProjectDto.challenges);
-    }
-    if (typeof createProjectDto.totalMemberWorked === 'string') {
-      createProjectDto.totalMemberWorked = parseInt(createProjectDto.totalMemberWorked, 10);
-    }
     return this.projectService.create(createProjectDto, file);
   }
 
@@ -286,7 +245,6 @@ export class ProjectController {
         image: { type: 'string', format: 'binary' },
         title: { type: 'string' },
         subtitle: { type: 'string' },
-        imageURL: { type: 'string' },
         frontendTechs: { type: 'array', items: { type: 'string' } },
         backendTechs: { type: 'array', items: { type: 'string' } },
         devopsTechs: { type: 'array', items: { type: 'string' } },
@@ -370,46 +328,6 @@ export class ProjectController {
     @Body() updateProjectDto: UpdateProjectDto,
     @UploadedFile() file?: Express.Multer.File,
   ) {
-    // Parse strings from multipart/form-data
-    // Arrays can be comma-separated strings or JSON arrays
-    if (typeof updateProjectDto.frontendTechs === 'string') {
-      updateProjectDto.frontendTechs = updateProjectDto.frontendTechs
-        .split(',')
-        .map((s) => s.trim());
-    }
-    if (typeof updateProjectDto.backendTechs === 'string') {
-      updateProjectDto.backendTechs = updateProjectDto.backendTechs.split(',').map((s) => s.trim());
-    }
-    if (typeof updateProjectDto.devopsTechs === 'string') {
-      updateProjectDto.devopsTechs = updateProjectDto.devopsTechs.split(',').map((s) => s.trim());
-    }
-    if (typeof updateProjectDto.designTechs === 'string') {
-      updateProjectDto.designTechs = updateProjectDto.designTechs.split(',').map((s) => s.trim());
-    }
-    if (typeof updateProjectDto.othersTechs === 'string') {
-      updateProjectDto.othersTechs = updateProjectDto.othersTechs.split(',').map((s) => s.trim());
-    }
-    if (typeof updateProjectDto.keyAccomplishments === 'string') {
-      updateProjectDto.keyAccomplishments = updateProjectDto.keyAccomplishments
-        .split(',')
-        .map((s) => s.trim());
-    }
-    // Objects must be JSON strings
-    if (typeof updateProjectDto.problems === 'string') {
-      updateProjectDto.problems = JSON.parse(updateProjectDto.problems);
-    }
-    if (typeof updateProjectDto.solutions === 'string') {
-      updateProjectDto.solutions = JSON.parse(updateProjectDto.solutions);
-    }
-    if (typeof updateProjectDto.solutionArchitecture === 'string') {
-      updateProjectDto.solutionArchitecture = JSON.parse(updateProjectDto.solutionArchitecture);
-    }
-    if (typeof updateProjectDto.challenges === 'string') {
-      updateProjectDto.challenges = JSON.parse(updateProjectDto.challenges);
-    }
-    if (typeof updateProjectDto.totalMemberWorked === 'string') {
-      updateProjectDto.totalMemberWorked = parseInt(updateProjectDto.totalMemberWorked, 10);
-    }
     return this.projectService.update(id, updateProjectDto, file);
   }
 

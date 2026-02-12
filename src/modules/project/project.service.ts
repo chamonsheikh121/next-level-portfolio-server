@@ -18,7 +18,7 @@ export class ProjectService {
 
   async create(createProjectDto: CreateProjectDto, file?: Express.Multer.File) {
     try {
-      let imageURL = createProjectDto.imageURL;
+      let imageURL: string | undefined;
 
       // Upload image to Cloudinary if file is provided
       if (file) {
@@ -90,7 +90,7 @@ export class ProjectService {
       // Check if project exists
       const existingProject = await this.findOne(id);
 
-      let imageURL = updateProjectDto.imageURL;
+      let imageURL: string | undefined;
 
       // Upload new image to Cloudinary if file is provided
       if (file) {

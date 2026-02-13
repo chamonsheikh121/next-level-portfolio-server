@@ -14,6 +14,11 @@ export class CreateTechnologyDto {
   @Max(100)
   level?: number;
 
+  @ApiProperty({ required: false, example: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/technologies/react-icon.png', description: 'URL of the technology icon (automatically set when uploading file)' })
+  @IsOptional()
+  @IsString()
+  iconUrl?: string;
+
   @ApiProperty({ example: 1, description: 'Skill ID this technology belongs to' })
   @IsNotEmpty()
   @IsInt()

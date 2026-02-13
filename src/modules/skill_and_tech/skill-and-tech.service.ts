@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../../common/prisma/prisma.service';
+import { CloudinaryService } from '../../common/cloudinary/cloudinary.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
 import { CreateTechnologyDto } from './dto/create-technology.dto';
@@ -7,7 +8,10 @@ import { UpdateTechnologyDto } from './dto/update-technology.dto';
 
 @Injectable()
 export class SkillAndTechService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
 
   // ==================== SKILL APIs ====================
 
@@ -122,7 +126,7 @@ export class SkillAndTechService {
   /**
    * Create a new technology
    */
-  async createTechnology(createTechnologyDto: CreateTechnologyDto) {
+  async createTechnology(createTechnologyDto: CreateTechnologyDto, file?: Express.Multer.File) {
     // Check if skill exists
     const skill = await this.prismaService.client.skill.findUnique({
       where: { id: createTechnologyDto.skillId },
@@ -132,8 +136,19 @@ export class SkillAndTechService {
       throw new NotFoundException(`Skill with ID ${createTechnologyDto.skillId} not found`);
     }
 
+    let iconUrl: string | undefined;
+
+    // Upload icon to Cloudinary if file is provided
+    if (file) {
+      const uploadResult = await this.cloudinaryService.uploadFile(file, 'portfolio/technologies');
+      iconUrl = uploadResult.secure_url;
+    }
+
     const technology = await this.prismaService.client.technology.create({
-      data: createTechnologyDto,
+      data: {
+        ...createTechnologyDto,
+        ...(iconUrl && { iconUrl }),
+      },
       include: {
         skill: true,
       },
@@ -149,7 +164,7 @@ export class SkillAndTechService {
   /**
    * Update a technology
    */
-  async updateTechnology(id: number, updateTechnologyDto: UpdateTechnologyDto) {
+  async updateTechnology(id: number, updateTechnologyDto: UpdateTechnologyDto, file?: Express.Multer.File) {
     // Check if technology exists
     const technology = await this.prismaService.client.technology.findUnique({
       where: { id },
@@ -170,9 +185,30 @@ export class SkillAndTechService {
       }
     }
 
+    let iconUrl: string | undefined;
+
+    // Upload icon to Cloudinary if file is provided
+    if (file) {
+      const uploadResult = await this.cloudinaryService.uploadFile(file, 'portfolio/technologies');
+      iconUrl = uploadResult.secure_url;
+
+      // Delete old icon from Cloudinary if it exists
+      if (technology.iconUrl) {
+        try {
+          await this.cloudinaryService.deleteFile(technology.iconUrl);
+        } catch (error) {
+          // Log error but don't fail the update
+          console.error('Failed to delete old icon from Cloudinary:', error);
+        }
+      }
+    }
+
     const updatedTechnology = await this.prismaService.client.technology.update({
       where: { id },
-      data: updateTechnologyDto,
+      data: {
+        ...updateTechnologyDto,
+        ...(iconUrl && { iconUrl }),
+      },
       include: {
         skill: true,
       },

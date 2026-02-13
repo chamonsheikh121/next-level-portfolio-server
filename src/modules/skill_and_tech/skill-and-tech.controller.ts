@@ -8,13 +8,18 @@ import {
   Param,
   ParseIntPipe,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
   ApiParam,
+  ApiConsumes,
+  ApiBody,
 } from '@nestjs/swagger';
 import { SkillAndTechService } from './skill-and-tech.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
@@ -223,7 +228,25 @@ export class SkillAndTechController {
   @Post('technologies')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'Create a new technology' })
+  @UseInterceptors(FileInterceptor('icon'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Create a new technology with optional icon upload' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['name', 'skillId'],
+      properties: {
+        icon: {
+          type: 'string',
+          format: 'binary',
+          description: 'Technology icon (optional)',
+        },
+        name: { type: 'string', example: 'React' },
+        level: { type: 'number', example: 85, description: 'Proficiency level (0-100)' },
+        skillId: { type: 'number', example: 1, description: 'Skill ID this technology belongs to' },
+      },
+    },
+  })
   @ApiResponse({ 
     status: 201, 
     description: 'Technology created successfully',
@@ -235,6 +258,7 @@ export class SkillAndTechController {
           id: 1,
           name: 'React',
           level: 90,
+          iconUrl: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/technologies/react-icon.png',
           skillId: 1,
           skill: { id: 1, name: 'Frontend Development', description: 'Building modern user interfaces' }
         }
@@ -271,15 +295,35 @@ export class SkillAndTechController {
       }
     }
   })
-  createTechnology(@Body() createTechnologyDto: CreateTechnologyDto) {
-    return this.skillAndTechService.createTechnology(createTechnologyDto);
+  createTechnology(
+    @Body() createTechnologyDto: CreateTechnologyDto,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    return this.skillAndTechService.createTechnology(createTechnologyDto, file);
   }
 
   @Patch('technologies/:id')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'Update a technology' })
+  @UseInterceptors(FileInterceptor('icon'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Update a technology with optional icon upload' })
   @ApiParam({ name: 'id', description: 'Technology ID' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        icon: {
+          type: 'string',
+          format: 'binary',
+          description: 'Technology icon (optional)',
+        },
+        name: { type: 'string', example: 'React' },
+        level: { type: 'number', example: 95, description: 'Proficiency level (0-100)' },
+        skillId: { type: 'number', example: 1, description: 'Skill ID this technology belongs to' },
+      },
+    },
+  })
   @ApiResponse({ 
     status: 200, 
     description: 'Technology updated successfully',
@@ -291,6 +335,7 @@ export class SkillAndTechController {
           id: 1,
           name: 'React',
           level: 95,
+          iconUrl: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/technologies/react-icon.png',
           skillId: 1,
           skill: { id: 1, name: 'Frontend Development', description: 'Building modern user interfaces' }
         }
@@ -330,8 +375,9 @@ export class SkillAndTechController {
   updateTechnology(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateTechnologyDto: UpdateTechnologyDto,
+    @UploadedFile() file?: Express.Multer.File,
   ) {
-    return this.skillAndTechService.updateTechnology(id, updateTechnologyDto);
+    return this.skillAndTechService.updateTechnology(id, updateTechnologyDto, file);
   }
 
   @Delete('technologies/:id')

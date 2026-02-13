@@ -3,11 +3,14 @@ import {
   NotFoundException,
   BadRequestException,
   InternalServerErrorException,
+  ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { CloudinaryService } from '../../common/cloudinary/cloudinary.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { CreateProjectTypeDto } from './dto/create-project-type.dto';
+import { UpdateProjectTypeDto } from './dto/update-project-type.dto';
 
 @Injectable()
 export class ProjectService {
@@ -16,8 +19,110 @@ export class ProjectService {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
+  // ==================== PROJECT TYPE ENDPOINTS ====================
+
+  async createProjectType(createProjectTypeDto: CreateProjectTypeDto) {
+    try {
+      // Check if type with this title already exists
+      const existingType = await this.prisma.client.projectType.findFirst({
+        where: { title: createProjectTypeDto.title },
+      });
+
+      if (existingType) {
+        throw new ConflictException(
+          `Project type with title "${createProjectTypeDto.title}" already exists`,
+        );
+      }
+
+      const projectType = await this.prisma.client.projectType.create({
+        data: createProjectTypeDto,
+      });
+
+      return projectType;
+    } catch (error) {
+      if (error instanceof ConflictException) {
+        throw error;
+      }
+      throw new InternalServerErrorException(`Failed to create project type: ${error.message}`);
+    }
+  }
+
+  async findAllProjectTypes() {
+    try {
+      const projectTypes = await this.prisma.client.projectType.findMany({
+        include: {
+          _count: {
+            select: { projects: true },
+          },
+        },
+        orderBy: {
+          id: 'asc',
+        },
+      });
+
+      return projectTypes;
+    } catch (error) {
+      throw new InternalServerErrorException(`Failed to fetch project types: ${error.message}`);
+    }
+  }
+
+  async updateProjectType(id: number, updateProjectTypeDto: UpdateProjectTypeDto) {
+    try {
+      // Check if project type exists
+      const existingType = await this.prisma.client.projectType.findUnique({
+        where: { id },
+      });
+
+      if (!existingType) {
+        throw new NotFoundException(`Project type with ID ${id} not found`);
+      }
+
+      // Check if updating to a title that already exists
+      if (updateProjectTypeDto.title) {
+        const duplicateType = await this.prisma.client.projectType.findFirst({
+          where: {
+            title: updateProjectTypeDto.title,
+            NOT: { id },
+          },
+        });
+
+        if (duplicateType) {
+          throw new ConflictException(
+            `Project type with title "${updateProjectTypeDto.title}" already exists`,
+          );
+        }
+      }
+
+      const updatedType = await this.prisma.client.projectType.update({
+        where: { id },
+        data: updateProjectTypeDto,
+      });
+
+      return updatedType;
+    } catch (error) {
+      if (
+        error instanceof NotFoundException ||
+        error instanceof ConflictException
+      ) {
+        throw error;
+      }
+      throw new InternalServerErrorException(`Failed to update project type: ${error.message}`);
+    }
+  }
+
+  // ==================== PROJECT ENDPOINTS ====================
+
   async create(createProjectDto: CreateProjectDto, file?: Express.Multer.File) {
     try {
+      // Check if project type exists
+      const projectType = await this.prisma.client.projectType.findUnique({
+        where: { id: createProjectDto.typeId },
+      });
+
+      if (!projectType) {
+        throw new NotFoundException(`Project type with ID ${createProjectDto.typeId} not found`);
+      }
+
       let imageURL: string | undefined;
 
       // Upload image to Cloudinary if file is provided
@@ -41,11 +146,14 @@ export class ProjectService {
           solutionArchitecture: createProjectDto.solutionArchitecture || {},
           challenges: createProjectDto.challenges || {},
         },
+        include: {
+          type: true,
+        },
       });
 
       return project;
     } catch (error) {
-      if (error instanceof BadRequestException) {
+      if (error instanceof BadRequestException || error instanceof NotFoundException) {
         throw error;
       }
       throw new InternalServerErrorException(`Failed to create project: ${error.message}`);
@@ -55,6 +163,9 @@ export class ProjectService {
   async findAll() {
     try {
       const projects = await this.prisma.client.project.findMany({
+        include: {
+          type: true,
+        },
         orderBy: {
           id: 'desc',
         },
@@ -70,6 +181,9 @@ export class ProjectService {
     try {
       const project = await this.prisma.client.project.findUnique({
         where: { id },
+        include: {
+          type: true,
+        },
       });
 
       if (!project) {
@@ -89,6 +203,17 @@ export class ProjectService {
     try {
       // Check if project exists
       const existingProject = await this.findOne(id);
+
+      // Check if project type exists (if typeId is being updated)
+      if (updateProjectDto.typeId) {
+        const projectType = await this.prisma.client.projectType.findUnique({
+          where: { id: updateProjectDto.typeId },
+        });
+
+        if (!projectType) {
+          throw new NotFoundException(`Project type with ID ${updateProjectDto.typeId} not found`);
+        }
+      }
 
       let imageURL: string | undefined;
 
@@ -111,7 +236,7 @@ export class ProjectService {
         where: { id },
         data: {
           ...updateProjectDto,
-          imageURL,
+          ...(imageURL && { imageURL }),
           ...(updateProjectDto.frontendTechs && { frontendTechs: updateProjectDto.frontendTechs }),
           ...(updateProjectDto.backendTechs && { backendTechs: updateProjectDto.backendTechs }),
           ...(updateProjectDto.devopsTechs && { devopsTechs: updateProjectDto.devopsTechs }),
@@ -126,6 +251,9 @@ export class ProjectService {
             solutionArchitecture: updateProjectDto.solutionArchitecture,
           }),
           ...(updateProjectDto.challenges && { challenges: updateProjectDto.challenges }),
+        },
+        include: {
+          type: true,
         },
       });
 

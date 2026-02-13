@@ -1,17 +1,30 @@
 import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from '../../common/prisma/prisma.service';
+import { CloudinaryService } from '../../common/cloudinary/cloudinary.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
 
 @Injectable()
 export class ServiceService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
 
-  async create(createServiceDto: CreateServiceDto) {
+  async create(createServiceDto: CreateServiceDto, file?: Express.Multer.File) {
     try {
+      let imageURL: string | undefined;
+
+      // Upload image to Cloudinary if file is provided
+      if (file) {
+        const uploadResult = await this.cloudinaryService.uploadFile(file, 'portfolio/services');
+        imageURL = uploadResult.secure_url;
+      }
+
       const service = await this.prisma.client.service.create({
         data: {
           ...createServiceDto,
+          imageURL,
           bulletPoints: createServiceDto.bulletPoints || [],
           coreTechStacks: createServiceDto.coreTechStacks || [],
         },
@@ -56,14 +69,34 @@ export class ServiceService {
     }
   }
 
-  async update(id: number, updateServiceDto: UpdateServiceDto) {
+  async update(id: number, updateServiceDto: UpdateServiceDto, file?: Express.Multer.File) {
     try {
       // Check if service exists
-      await this.findOne(id);
+      const existingService = await this.findOne(id);
+
+      let imageURL: string | undefined;
+
+      // Upload new image to Cloudinary if file is provided
+      if (file) {
+        const uploadResult = await this.cloudinaryService.uploadFile(file, 'portfolio/services');
+        imageURL = uploadResult.secure_url;
+
+        // Delete old image from Cloudinary if it exists
+        if (existingService.imageURL) {
+          try {
+            await this.cloudinaryService.deleteFile(existingService.imageURL);
+          } catch (error) {
+            console.error('Failed to delete old image:', error.message);
+          }
+        }
+      }
 
       const updatedService = await this.prisma.client.service.update({
         where: { id },
-        data: updateServiceDto,
+        data: {
+          ...updateServiceDto,
+          ...(imageURL && { imageURL }),
+        },
       });
 
       return updatedService;
@@ -78,7 +111,16 @@ export class ServiceService {
   async remove(id: number) {
     try {
       // Check if service exists
-      await this.findOne(id);
+      const existingService = await this.findOne(id);
+
+      // Delete image from Cloudinary if it exists
+      if (existingService.imageURL) {
+        try {
+          await this.cloudinaryService.deleteFile(existingService.imageURL);
+        } catch (error) {
+          console.error('Failed to delete image:', error.message);
+        }
+      }
 
       await this.prisma.client.service.delete({
         where: { id },

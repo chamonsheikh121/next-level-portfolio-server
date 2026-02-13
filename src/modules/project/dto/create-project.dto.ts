@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsOptional, IsArray, IsInt, IsObject, Min } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 
 export class CreateProjectDto {
   @ApiProperty({
@@ -18,6 +18,15 @@ export class CreateProjectDto {
   @IsString()
   @IsOptional()
   subtitle?: string;
+
+  @ApiProperty({
+    description: 'Project type ID',
+    example: 1,
+  })
+  @Type(() => Number)
+  @IsInt()
+  @IsNotEmpty()
+  typeId: number;
 
   @ApiPropertyOptional({
     description: 'Frontend technologies used',

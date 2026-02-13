@@ -8,8 +8,11 @@ import {
   Delete,
   ParseIntPipe,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam, ApiConsumes, ApiBody } from '@nestjs/swagger';
 import { ServiceService } from './service.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
@@ -24,7 +27,34 @@ export class ServiceController {
   @Post()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create a new service' })
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Create a new service with optional image upload' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        image: {
+          type: 'string',
+          format: 'binary',
+          description: 'Service image (optional)',
+        },
+        title: { type: 'string', example: 'Full-Stack Web Development' },
+        subtitle: { type: 'string', example: 'Building modern, scalable web applications' },
+        bulletPoints: {
+          type: 'array',
+          items: { type: 'string' },
+          example: ['Custom web application development', 'RESTful API design'],
+        },
+        coreTechStacks: {
+          type: 'array',
+          items: { type: 'string' },
+          example: ['React', 'Node.js', 'PostgreSQL'],
+        },
+      },
+      required: ['title'],
+    },
+  })
   @ApiResponse({
     status: 201,
     description: 'Service created successfully',
@@ -33,6 +63,7 @@ export class ServiceController {
         id: 1,
         title: 'Full-Stack Web Development',
         subtitle: 'Building modern, scalable web applications',
+        imageURL: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/services/service.png',
         bulletPoints: [
           'Custom web application development',
           'RESTful API design and implementation',
@@ -66,8 +97,8 @@ export class ServiceController {
       },
     },
   })
-  create(@Body() createServiceDto: CreateServiceDto) {
-    return this.serviceService.create(createServiceDto);
+  create(@Body() createServiceDto: CreateServiceDto, @UploadedFile() file?: Express.Multer.File) {
+    return this.serviceService.create(createServiceDto, file);
   }
 
   @Get()
@@ -82,6 +113,7 @@ export class ServiceController {
           id: 1,
           title: 'Full-Stack Web Development',
           subtitle: 'Building modern, scalable web applications',
+          imageURL: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/services/service1.png',
           bulletPoints: [
             'Custom web application development',
             'RESTful API design and implementation',
@@ -95,6 +127,7 @@ export class ServiceController {
           id: 2,
           title: 'Mobile App Development',
           subtitle: 'Native and cross-platform mobile solutions',
+          imageURL: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/services/service2.png',
           bulletPoints: [
             'iOS and Android app development',
             'React Native applications',
@@ -123,6 +156,7 @@ export class ServiceController {
         id: 1,
         title: 'Full-Stack Web Development',
         subtitle: 'Building modern, scalable web applications',
+        imageURL: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/services/service.png',
         bulletPoints: [
           'Custom web application development',
           'RESTful API design and implementation',
@@ -153,8 +187,32 @@ export class ServiceController {
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update service' })
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Update service with optional image upload' })
   @ApiParam({ name: 'id', description: 'Service ID', type: Number })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        image: {
+          type: 'string',
+          format: 'binary',
+          description: 'Service image (optional)',
+        },
+        title: { type: 'string' },
+        subtitle: { type: 'string' },
+        bulletPoints: {
+          type: 'array',
+          items: { type: 'string' },
+        },
+        coreTechStacks: {
+          type: 'array',
+          items: { type: 'string' },
+        },
+      },
+    },
+  })
   @ApiResponse({
     status: 200,
     description: 'Service updated successfully',
@@ -163,6 +221,7 @@ export class ServiceController {
         id: 1,
         title: 'Full-Stack Web Development (Updated)',
         subtitle: 'Building modern, scalable web applications with cutting-edge tech',
+        imageURL: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/services/service-updated.png',
         bulletPoints: [
           'Custom web application development',
           'RESTful API design and implementation',
@@ -197,8 +256,12 @@ export class ServiceController {
       },
     },
   })
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateServiceDto: UpdateServiceDto) {
-    return this.serviceService.update(id, updateServiceDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateServiceDto: UpdateServiceDto,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    return this.serviceService.update(id, updateServiceDto, file);
   }
 
   @Delete(':id')

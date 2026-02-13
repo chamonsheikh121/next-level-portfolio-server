@@ -24,6 +24,8 @@ import {
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { CreateProjectTypeDto } from './dto/create-project-type.dto';
+import { UpdateProjectTypeDto } from './dto/update-project-type.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { Public } from '../../common/decorators/public.decorator';
 
@@ -31,6 +33,113 @@ import { Public } from '../../common/decorators/public.decorator';
 @Controller('projects')
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
+
+  // ==================== PROJECT TYPE ENDPOINTS ====================
+
+  @Get('types')
+  @Public()
+  @ApiOperation({ summary: 'Get all project types' })
+  @ApiResponse({
+    status: 200,
+    description: 'Project types retrieved successfully',
+    schema: {
+      example: [
+        {
+          id: 1,
+          title: 'Web Application',
+          _count: {
+            projects: 5,
+          },
+        },
+        {
+          id: 2,
+          title: 'Mobile Application',
+          _count: {
+            projects: 3,
+          },
+        },
+      ],
+    },
+  })
+  findAllProjectTypes() {
+    return this.projectService.findAllProjectTypes();
+  }
+
+  @Post('types')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Create a new project type' })
+  @ApiResponse({
+    status: 201,
+    description: 'Project type created successfully',
+    schema: {
+      example: {
+        id: 1,
+        title: 'Web Application',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Project type with this title already exists',
+    schema: {
+      example: {
+        statusCode: 409,
+        message: 'Project type with title "Web Application" already exists',
+        error: 'Conflict',
+      },
+    },
+  })
+  createProjectType(@Body() createProjectTypeDto: CreateProjectTypeDto) {
+    return this.projectService.createProjectType(createProjectTypeDto);
+  }
+
+  @Patch('types/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update a project type' })
+  @ApiParam({ name: 'id', description: 'Project type ID', type: Number })
+  @ApiResponse({
+    status: 200,
+    description: 'Project type updated successfully',
+    schema: {
+      example: {
+        id: 1,
+        title: 'Web Application (Updated)',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Project type not found',
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'Project type with ID 999 not found',
+        error: 'Not Found',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Project type with this title already exists',
+  })
+  updateProjectType(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateProjectTypeDto: UpdateProjectTypeDto,
+  ) {
+    return this.projectService.updateProjectType(id, updateProjectTypeDto);
+  }
+
+  // ==================== PROJECT ENDPOINTS ====================
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -49,6 +158,7 @@ export class ProjectController {
         },
         title: { type: 'string', example: 'E-Commerce Platform' },
         subtitle: { type: 'string', example: 'Full-stack online shopping solution' },
+        typeId: { type: 'number', example: 1, description: 'Project type ID' },
         frontendTechs: {
           type: 'array',
           items: { type: 'string' },
@@ -85,7 +195,7 @@ export class ProjectController {
         totalMemberWorked: { type: 'number', example: 5 },
         outcome: { type: 'string', example: 'Successfully launched with 10K+ active users' },
       },
-      required: ['title'],
+      required: ['title', 'typeId'],
     },
   })
   @ApiResponse({
@@ -96,6 +206,11 @@ export class ProjectController {
         id: 1,
         title: 'E-Commerce Platform',
         subtitle: 'Full-stack online shopping solution',
+        typeId: 1,
+        type: {
+          id: 1,
+          title: 'Web Application',
+        },
         imageURL:
           'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/projects/ecommerce.png',
         frontendTechs: ['React', 'TypeScript', 'Tailwind CSS'],
@@ -159,6 +274,11 @@ export class ProjectController {
           id: 1,
           title: 'E-Commerce Platform',
           subtitle: 'Full-stack online shopping solution',
+          typeId: 1,
+          type: {
+            id: 1,
+            title: 'Web Application',
+          },
           imageURL:
             'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/projects/ecommerce.png',
           frontendTechs: ['React', 'TypeScript', 'Tailwind CSS'],
@@ -196,6 +316,11 @@ export class ProjectController {
         id: 1,
         title: 'E-Commerce Platform',
         subtitle: 'Full-stack online shopping solution',
+        typeId: 1,
+        type: {
+          id: 1,
+          title: 'Web Application',
+        },
         imageURL:
           'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/projects/ecommerce.png',
         frontendTechs: ['React', 'TypeScript', 'Tailwind CSS'],
@@ -245,6 +370,7 @@ export class ProjectController {
         image: { type: 'string', format: 'binary' },
         title: { type: 'string' },
         subtitle: { type: 'string' },
+        typeId: { type: 'number', description: 'Project type ID' },
         frontendTechs: { type: 'array', items: { type: 'string' } },
         backendTechs: { type: 'array', items: { type: 'string' } },
         devopsTechs: { type: 'array', items: { type: 'string' } },
@@ -271,6 +397,11 @@ export class ProjectController {
         id: 1,
         title: 'E-Commerce Platform (Updated)',
         subtitle: 'Full-stack online shopping solution',
+        typeId: 1,
+        type: {
+          id: 1,
+          title: 'Web Application',
+        },
         imageURL:
           'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/projects/ecommerce-updated.png',
         frontendTechs: ['React', 'Next.js', 'TypeScript'],

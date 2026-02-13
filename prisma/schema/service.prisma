@@ -2,6 +2,7 @@ model Service {
   id             Int      @id @default(autoincrement())
   title          String
   subtitle       String?
+  imageURL       String?
   bulletPoints   String[]
   coreTechStacks String[]
 }

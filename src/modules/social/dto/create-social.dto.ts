@@ -14,7 +14,7 @@ export class CreateSocialDto {
     description: 'URL to the social profile',
     example: 'https://github.com/johndoe',
   })
-  @IsUrl()
+  @IsString()
   @IsNotEmpty()
   url: string;
 }

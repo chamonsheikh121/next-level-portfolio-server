@@ -1,12 +1,13 @@
 model ProfileInformation {
-  id            Int    @id @default(autoincrement())
-  name          String
-  subtitle      String?
-  location      String?
-  bio           String?
-  description   String?
-  resumeURL     String?
-  contactEmail  String?
-  phone         String?
-  workingHour   String?
+  id           Int     @id @default(autoincrement())
+  name         String
+  subtitle     String?
+  imageURL     String?
+  location     String?
+  bio          String?
+  description  String?
+  resumeURL    String?
+  contactEmail String?
+  phone        String?
+  workingHour  String?
 }

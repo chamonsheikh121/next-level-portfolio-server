@@ -202,177 +202,7 @@ export class BlogController {
     return this.blogService.findAllBlogs();
   }
 
-  @Get(':id')
-  @Public()
-  @ApiOperation({ summary: 'Get blog post by ID' })
-  @ApiParam({ name: 'id', description: 'Blog ID', type: Number })
-  @ApiResponse({
-    status: 200,
-    description: 'Blog retrieved successfully',
-    schema: {
-      example: {
-        id: 1,
-        title: 'Getting Started with NestJS',
-        categoryId: 1,
-        category: {
-          id: 1,
-          title: 'Web Development',
-        },
-        blocks: {
-          time: 1635603431943,
-          blocks: [
-            {
-              type: 'header',
-              data: { text: 'Introduction to NestJS', level: 2 },
-            },
-            {
-              type: 'paragraph',
-              data: { text: 'NestJS is a progressive Node.js framework...' },
-            },
-          ],
-          version: '2.22.2',
-        },
-        tags: ['NestJS', 'TypeScript', 'Backend'],
-        createdAt: '2024-02-11T10:00:00.000Z',
-        updatedAt: '2024-02-11T10:00:00.000Z',
-      },
-    },
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Blog not found',
-    schema: {
-      example: {
-        statusCode: 404,
-        message: 'Blog with ID 999 not found',
-        error: 'Not Found',
-      },
-    },
-  })
-  findOneBlog(@Param('id', ParseIntPipe) id: number) {
-    return this.blogService.findOneBlog(id);
-  }
-
-  @Patch(':id')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @UseInterceptors(FileInterceptor('image'))
-  @ApiConsumes('multipart/form-data')
-  @ApiOperation({ summary: 'Update blog post with optional image upload' })
-  @ApiParam({ name: 'id', description: 'Blog ID', type: Number })
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        image: { type: 'string', format: 'binary' },
-        title: { type: 'string' },
-        description: { type: 'string' },
-        categoryId: { type: 'number' },
-        blocks: { type: 'string', description: 'Editor.js content as JSON string' },
-        tags: { type: 'string', description: 'Tags as JSON array string or comma-separated' },
-      },
-    },
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Blog updated successfully',
-    schema: {
-      example: {
-        id: 1,
-        imageURL:
-          'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/blogs/blog-updated.png',
-        title: 'Getting Started with NestJS (Updated)',
-        description: 'Learn how to build scalable applications',
-        categoryId: 1,
-        category: {
-          id: 1,
-          title: 'Web Development',
-        },
-        blocks: {
-          time: 1635603431943,
-          blocks: [
-            {
-              type: 'header',
-              data: { text: 'Introduction to NestJS - Updated', level: 2 },
-            },
-          ],
-          version: '2.22.2',
-        },
-        tags: ['NestJS', 'TypeScript', 'Backend', 'Framework'],
-        createdAt: '2024-02-11T10:00:00.000Z',
-        updatedAt: '2024-02-11T11:00:00.000Z',
-      },
-    },
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized',
-    schema: {
-      example: {
-        statusCode: 401,
-        message: 'Unauthorized',
-      },
-    },
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Blog not found',
-    schema: {
-      example: {
-        statusCode: 404,
-        message: 'Blog with ID 999 not found',
-        error: 'Not Found',
-      },
-    },
-  })
-  updateBlog(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateBlogDto: UpdateBlogDto,
-    @UploadedFile() file?: Express.Multer.File,
-  ) {
-    return this.blogService.updateBlog(id, updateBlogDto, file);
-  }
-
-  @Delete(':id')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete blog post' })
-  @ApiParam({ name: 'id', description: 'Blog ID', type: Number })
-  @ApiResponse({
-    status: 200,
-    description: 'Blog deleted successfully',
-    schema: {
-      example: {
-        message: 'Blog with ID 1 has been deleted successfully',
-      },
-    },
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized',
-    schema: {
-      example: {
-        statusCode: 401,
-        message: 'Unauthorized',
-      },
-    },
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Blog not found',
-    schema: {
-      example: {
-        statusCode: 404,
-        message: 'Blog with ID 999 not found',
-        error: 'Not Found',
-      },
-    },
-  })
-  removeBlog(@Param('id', ParseIntPipe) id: number) {
-    return this.blogService.removeBlog(id);
-  }
-
-  // Blog Category endpoints
+  // ==================== BLOG CATEGORY ENDPOINTS (Must come before :id routes) ====================
   @Post('categories')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
@@ -564,5 +394,177 @@ export class BlogController {
   })
   removeCategory(@Param('id', ParseIntPipe) id: number) {
     return this.blogService.removeCategory(id);
+  }
+
+  // ==================== BLOG ENDPOINTS WITH :id (Must come after specific routes) ====================
+
+  @Get(':id')
+  @Public()
+  @ApiOperation({ summary: 'Get blog post by ID' })
+  @ApiParam({ name: 'id', description: 'Blog ID', type: Number })
+  @ApiResponse({
+    status: 200,
+    description: 'Blog retrieved successfully',
+    schema: {
+      example: {
+        id: 1,
+        title: 'Getting Started with NestJS',
+        categoryId: 1,
+        category: {
+          id: 1,
+          title: 'Web Development',
+        },
+        blocks: {
+          time: 1635603431943,
+          blocks: [
+            {
+              type: 'header',
+              data: { text: 'Introduction to NestJS', level: 2 },
+            },
+            {
+              type: 'paragraph',
+              data: { text: 'NestJS is a progressive Node.js framework...' },
+            },
+          ],
+          version: '2.22.2',
+        },
+        tags: ['NestJS', 'TypeScript', 'Backend'],
+        createdAt: '2024-02-11T10:00:00.000Z',
+        updatedAt: '2024-02-11T10:00:00.000Z',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Blog not found',
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'Blog with ID 999 not found',
+        error: 'Not Found',
+      },
+    },
+  })
+  findOneBlog(@Param('id', ParseIntPipe) id: number) {
+    return this.blogService.findOneBlog(id);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Update blog post with optional image upload' })
+  @ApiParam({ name: 'id', description: 'Blog ID', type: Number })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        image: { type: 'string', format: 'binary' },
+        title: { type: 'string' },
+        description: { type: 'string' },
+        categoryId: { type: 'number' },
+        blocks: { type: 'string', description: 'Editor.js content as JSON string' },
+        tags: { type: 'string', description: 'Tags as JSON array string or comma-separated' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Blog updated successfully',
+    schema: {
+      example: {
+        id: 1,
+        imageURL:
+          'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/blogs/blog-updated.png',
+        title: 'Getting Started with NestJS (Updated)',
+        description: 'Learn how to build scalable applications',
+        categoryId: 1,
+        category: {
+          id: 1,
+          title: 'Web Development',
+        },
+        blocks: {
+          time: 1635603431943,
+          blocks: [
+            {
+              type: 'header',
+              data: { text: 'Introduction to NestJS - Updated', level: 2 },
+            },
+          ],
+          version: '2.22.2',
+        },
+        tags: ['NestJS', 'TypeScript', 'Backend', 'Framework'],
+        createdAt: '2024-02-11T10:00:00.000Z',
+        updatedAt: '2024-02-11T11:00:00.000Z',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'Unauthorized',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Blog not found',
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'Blog with ID 999 not found',
+        error: 'Not Found',
+      },
+    },
+  })
+  updateBlog(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateBlogDto: UpdateBlogDto,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    return this.blogService.updateBlog(id, updateBlogDto, file);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete blog post' })
+  @ApiParam({ name: 'id', description: 'Blog ID', type: Number })
+  @ApiResponse({
+    status: 200,
+    description: 'Blog deleted successfully',
+    schema: {
+      example: {
+        message: 'Blog with ID 1 has been deleted successfully',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'Unauthorized',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Blog not found',
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'Blog with ID 999 not found',
+        error: 'Not Found',
+      },
+    },
+  })
+  removeBlog(@Param('id', ParseIntPipe) id: number) {
+    return this.blogService.removeBlog(id);
   }
 }

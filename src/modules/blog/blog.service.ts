@@ -34,6 +34,23 @@ export class BlogService {
         where: { id: createBlogDto.categoryId },
       });
 
+      const isFeaturedExist = await this.prisma.client.blog.findFirst({
+        where: {
+          isFeatured: true,
+        },
+      });
+
+      if (createBlogDto.isFeatured && isFeaturedExist) {
+        await this.prisma.client.blog.update({
+          where: {
+            id: isFeaturedExist.id,
+          },
+          data: {
+            isFeatured: false,
+          },
+        });
+      }
+
       if (!category) {
         throw new NotFoundException(`Blog category with ID ${createBlogDto.categoryId} not found`);
       }
@@ -72,6 +89,59 @@ export class BlogService {
       return blogs;
     } catch (error) {
       throw new InternalServerErrorException(`Failed to fetch blogs: ${error.message}`);
+    }
+  }
+
+  async findBlogsPaginated(page: number = 1, limit: number = 9) {
+    try {
+      const skip = (page - 1) * limit;
+
+      const [blogs, total] = await Promise.all([
+        this.prisma.client.blog.findMany({
+          skip,
+          take: limit,
+          include: {
+            category: true,
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        }),
+        this.prisma.client.blog.count(),
+      ]);
+
+      return {
+        data: blogs,
+        meta: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+          hasMore: page * limit < total,
+        },
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(`Failed to fetch blogs: ${error.message}`);
+    }
+  }
+
+  async findFeaturedBlog() {
+    try {
+      const blog = await this.prisma.client.blog.findFirst({
+        where: {
+          isFeatured: true,
+        },
+        include: {
+          category: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+
+      return blog;
+    } catch (error) {
+      throw new InternalServerErrorException(`Failed to fetch featured blog: ${error.message}`);
     }
   }
 

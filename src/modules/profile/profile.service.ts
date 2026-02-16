@@ -91,6 +91,7 @@ export class ProfileService {
           contactEmail: updateProfileDto.contactEmail,
           phone: updateProfileDto.phone,
           workingHour: updateProfileDto.workingHour,
+          status: updateProfileDto.status,
         },
       });
     }

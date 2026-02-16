@@ -160,6 +160,38 @@ export class FaqService {
     }
   }
 
+  async findByCategory(categoryId: number) {
+    try {
+      // Check if category exists
+      const category = await this.prisma.client.faqCategory.findUnique({
+        where: { id: categoryId },
+      });
+
+      if (!category) {
+        throw new NotFoundException(`FAQ category with ID ${categoryId} not found`);
+      }
+
+      const faqs = await this.prisma.client.faq.findMany({
+        where: {
+          categoryId: categoryId,
+        },
+        include: {
+          category: true,
+        },
+        orderBy: {
+          id: 'asc',
+        },
+      });
+
+      return faqs;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException(`Failed to fetch FAQs by category: ${error.message}`);
+    }
+  }
+
   async findOne(id: number) {
     try {
       const faq = await this.prisma.client.faq.findUnique({

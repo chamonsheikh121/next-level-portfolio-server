@@ -154,6 +154,36 @@ export class FaqController {
     return this.faqService.findAll();
   }
 
+  @Get('category/:categoryId')
+  @Public()
+  @ApiOperation({ summary: 'Get all FAQs by category ID' })
+  @ApiParam({ name: 'categoryId', description: 'FAQ Category ID', type: Number })
+  @ApiResponse({
+    status: 200,
+    description: 'FAQs retrieved successfully',
+    schema: {
+      example: [
+        {
+          id: 1,
+          question: 'What services do you offer?',
+          answer: 'I offer full-stack web development services.',
+          categoryId: 1,
+          category: {
+            id: 1,
+            title: 'General Questions',
+          },
+        },
+      ],
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'FAQ category not found',
+  })
+  findByCategory(@Param('categoryId', ParseIntPipe) categoryId: number) {
+    return this.faqService.findByCategory(categoryId);
+  }
+
   @Get(':id')
   @Public()
   @ApiOperation({ summary: 'Get FAQ by ID' })

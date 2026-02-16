@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsOptional, IsString, IsEnum } from 'class-validator';
+import { DeveloperStatus } from '../../../../prisma/generated/prisma/enums';
+
 
 export class UpdateProfileDto {
   @ApiProperty({ required: false, example: 'john@example.com' })
@@ -51,4 +53,15 @@ export class UpdateProfileDto {
   @IsOptional()
   @IsString()
   workingHour?: string;
+
+  @ApiProperty({
+    required: false,
+    enum: DeveloperStatus,
+    example: 'AVAILABLE',
+    description: 'Current availability status',
+    enumName: 'DeveloperStatus',
+  })
+  @IsOptional()
+  @IsEnum(DeveloperStatus)
+  status?: DeveloperStatus;
 }

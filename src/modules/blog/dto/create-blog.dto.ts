@@ -1,5 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsOptional, IsInt, IsArray, IsObject } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsInt,
+  IsArray,
+  IsObject,
+  IsBoolean,
+} from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class CreateBlogDto {
@@ -86,11 +94,28 @@ export class CreateBlogDto {
         const parsed = JSON.parse(value);
         return Array.isArray(parsed) ? parsed : [value];
       } catch {
-        return value.split(',').map(item => item.trim()).filter(Boolean);
+        return value
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean);
       }
     }
     return [value];
   })
   @IsArray()
   tags?: string[];
+
+  @ApiPropertyOptional({
+    description: 'Mark blog as featured (displays in hero section)',
+    example: false,
+    default: false,
+  })
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'string') return value === 'true';
+    return false;
+  })
+  @IsBoolean()
+  isFeatured?: boolean;
 }

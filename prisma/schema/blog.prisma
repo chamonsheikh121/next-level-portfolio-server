@@ -5,14 +5,15 @@ model BlogCategory {
 }
 
 model Blog {
-  id          Int      @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   imageURL    String?
   title       String
   description String?
   categoryId  Int
   category    BlogCategory @relation(fields: [categoryId], references: [id])
-  blocks      Json      // Editor.js output
+  blocks      Json // Editor.js output
   tags        String[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  isFeatured  Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }

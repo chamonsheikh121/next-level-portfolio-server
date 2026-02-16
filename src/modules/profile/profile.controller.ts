@@ -50,6 +50,7 @@ export class ProfileController {
         contactEmail: 'contact@example.com',
         phone: '+1234567890',
         workingHour: 'Mon-Fri: 9AM-5PM EST',
+        status: 'AVAILABLE',
       },
     },
   })
@@ -103,6 +104,19 @@ export class ProfileController {
         contactEmail: { type: 'string', example: 'contact@example.com' },
         phone: { type: 'string', example: '+1234567890' },
         workingHour: { type: 'string', example: 'Mon-Fri: 9AM-5PM EST' },
+        status: {
+          type: 'string',
+          enum: [
+            'AVAILABLE',
+            'LIMITED',
+            'IN_PROGRESS',
+            'FULLY_BOOKED',
+            'ON_VACATION',
+            'NOT_AVAILABLE',
+          ],
+          example: 'AVAILABLE',
+          description: 'Current availability status',
+        },
       },
     },
   })
@@ -126,6 +140,7 @@ export class ProfileController {
           contactEmail: 'contact@example.com',
           phone: '+1234567890',
           workingHour: 'Mon-Fri: 9AM-5PM EST',
+          status: 'AVAILABLE',
         },
       },
     },

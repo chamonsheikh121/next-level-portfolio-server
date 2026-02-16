@@ -100,10 +100,7 @@ export class ProjectService {
 
       return updatedType;
     } catch (error) {
-      if (
-        error instanceof NotFoundException ||
-        error instanceof ConflictException
-      ) {
+      if (error instanceof NotFoundException || error instanceof ConflictException) {
         throw error;
       }
       throw new InternalServerErrorException(`Failed to update project type: ${error.message}`);
@@ -145,6 +142,7 @@ export class ProjectService {
           solutions: createProjectDto.solutions || {},
           solutionArchitecture: createProjectDto.solutionArchitecture || {},
           challenges: createProjectDto.challenges || {},
+          isFeatured: createProjectDto.isFeatured ?? false,
         },
         include: {
           type: true,
@@ -174,6 +172,27 @@ export class ProjectService {
       return projects;
     } catch (error) {
       throw new InternalServerErrorException(`Failed to fetch projects: ${error.message}`);
+    }
+  }
+
+  async findFeaturedProjects() {
+    try {
+      const featuredProjects = await this.prisma.client.project.findMany({
+        where: {
+          isFeatured: true,
+        },
+        include: {
+          type: true,
+        },
+        orderBy: {
+          id: 'desc',
+        },
+        take: 3,
+      });
+
+      return featuredProjects;
+    } catch (error) {
+      throw new InternalServerErrorException(`Failed to fetch featured projects: ${error.message}`);
     }
   }
 
@@ -251,6 +270,9 @@ export class ProjectService {
             solutionArchitecture: updateProjectDto.solutionArchitecture,
           }),
           ...(updateProjectDto.challenges && { challenges: updateProjectDto.challenges }),
+          ...(updateProjectDto.isFeatured !== undefined && {
+            isFeatured: updateProjectDto.isFeatured,
+          }),
         },
         include: {
           type: true,

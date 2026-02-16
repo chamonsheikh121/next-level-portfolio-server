@@ -194,6 +194,9 @@ export class ProjectController {
         role: { type: 'string', example: 'Full-stack Developer' },
         totalMemberWorked: { type: 'number', example: 5 },
         outcome: { type: 'string', example: 'Successfully launched with 10K+ active users' },
+        isFeatured: { type: 'boolean', example: false, description: 'Mark project as featured' },
+        liveUrl: { type: 'string', example: 'https://ecommerce-demo.com' },
+        githubUrl: { type: 'string', example: 'https://github.com/username/ecommerce-platform' },
       },
       required: ['title', 'typeId'],
     },
@@ -234,6 +237,9 @@ export class ProjectController {
         role: 'Full-stack Developer',
         totalMemberWorked: 5,
         outcome: 'Successfully launched with 10K+ active users',
+        isFeatured: false,
+        liveUrl: 'https://ecommerce-demo.com',
+        githubUrl: 'https://github.com/username/ecommerce-platform',
       },
     },
   })
@@ -296,12 +302,60 @@ export class ProjectController {
           role: 'Full-stack Developer',
           totalMemberWorked: 5,
           outcome: 'Successfully launched with 10K+ active users',
+          isFeatured: false,
+          liveUrl: 'https://ecommerce-demo.com',
+          githubUrl: 'https://github.com/username/ecommerce-platform',
         },
       ],
     },
   })
   findAll() {
     return this.projectService.findAll();
+  }
+
+  @Get('featured/list')
+  @Public()
+  @ApiOperation({ summary: 'Get featured projects (max 3)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Featured projects retrieved successfully',
+    schema: {
+      example: [
+        {
+          id: 1,
+          title: 'E-Commerce Platform',
+          subtitle: 'Full-stack online shopping solution',
+          typeId: 1,
+          type: {
+            id: 1,
+            title: 'Web Application',
+          },
+          imageURL:
+            'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/projects/ecommerce.png',
+          frontendTechs: ['React', 'TypeScript', 'Tailwind CSS'],
+          backendTechs: ['Node.js', 'NestJS', 'PostgreSQL'],
+          devopsTechs: ['Docker', 'AWS', 'GitHub Actions'],
+          designTechs: ['Figma'],
+          othersTechs: ['Redis'],
+          keyAccomplishments: ['Increased sales by 40%'],
+          projectOverview: 'A comprehensive e-commerce platform',
+          problems: {},
+          solutions: {},
+          solutionArchitecture: {},
+          challenges: {},
+          timeline: '6 months',
+          role: 'Full-stack Developer',
+          totalMemberWorked: 5,
+          outcome: 'Successfully launched with 10K+ active users',
+          isFeatured: true,
+          liveUrl: 'https://ecommerce-demo.com',
+          githubUrl: 'https://github.com/username/ecommerce-platform',
+        },
+      ],
+    },
+  })
+  findFeaturedProjects() {
+    return this.projectService.findFeaturedProjects();
   }
 
   @Get(':id')
@@ -338,6 +392,9 @@ export class ProjectController {
         role: 'Full-stack Developer',
         totalMemberWorked: 5,
         outcome: 'Successfully launched with 10K+ active users',
+        isFeatured: false,
+        liveUrl: 'https://ecommerce-demo.com',
+        githubUrl: 'https://github.com/username/ecommerce-platform',
       },
     },
   })
@@ -386,6 +443,9 @@ export class ProjectController {
         role: { type: 'string' },
         totalMemberWorked: { type: 'number' },
         outcome: { type: 'string' },
+        isFeatured: { type: 'boolean', description: 'Mark project as featured' },
+        liveUrl: { type: 'string' },
+        githubUrl: { type: 'string' },
       },
     },
   })
@@ -419,6 +479,9 @@ export class ProjectController {
         role: 'Lead Developer',
         totalMemberWorked: 7,
         outcome: 'Successfully serving 50K+ active users',
+        isFeatured: true,
+        liveUrl: 'https://ecommerce-demo-v2.com',
+        githubUrl: 'https://github.com/username/ecommerce-platform-v2',
       },
     },
   })

@@ -26,4 +26,7 @@ model Project {
   role                 String?
   totalMemberWorked    Int?
   outcome              String?
+  isFeatured           Boolean     @default(false)
+  liveUrl              String?
+  githubUrl            String?
 }

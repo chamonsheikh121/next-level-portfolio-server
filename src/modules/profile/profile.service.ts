@@ -101,4 +101,73 @@ export class ProfileService {
       data: updatedProfile,
     };
   }
+
+  /**
+   * Get career timeline (education + experience) sorted by date (public)
+   */
+  async getCareerTimeline() {
+    // Fetch all education records
+    const education = await this.prismaService.client.education.findMany({
+      orderBy: { graduationDate: 'desc' },
+    });
+
+    // Fetch all experience records
+    const experience = await this.prismaService.client.experience.findMany({
+      orderBy: { startingDate: 'desc' },
+    });
+
+    // Transform education data to timeline format
+    const educationTimeline = education.map((edu) => ({
+      id: edu.id,
+      type: 'education' as const,
+      title: edu.title,
+      organization: edu.institution,
+      location: edu.location,
+      startDate: null, // Education typically doesn't have start date
+      endDate: edu.graduationDate,
+      description: edu.description,
+      imageURL: edu.imageURL,
+      achievements: [],
+      technologies: [],
+    }));
+
+    // Transform experience data to timeline format
+    const experienceTimeline = experience.map((exp) => ({
+      id: exp.id,
+      type: 'experience' as const,
+      title: exp.title,
+      organization: exp.company,
+      location: exp.location,
+      startDate: exp.startingDate,
+      endDate: exp.endingDate,
+      description: exp.description,
+      imageURL: exp.imageURL,
+      achievements: exp.keyAchievements,
+      technologies: exp.technologies,
+    }));
+
+    // Combine both arrays
+    const timeline = [...educationTimeline, ...experienceTimeline];
+
+    // Sort by most recent first (using endDate or startDate)
+    timeline.sort((a, b) => {
+      const dateA = a.endDate || a.startDate;
+      const dateB = b.endDate || b.startDate;
+
+      if (!dateA && !dateB) return 0;
+      if (!dateA) return 1;
+      if (!dateB) return -1;
+
+      return new Date(dateB).getTime() - new Date(dateA).getTime();
+    });
+
+    return {
+      timeline,
+      summary: {
+        totalEducation: education.length,
+        totalExperience: experience.length,
+        totalItems: timeline.length,
+      },
+    };
+  }
 }

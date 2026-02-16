@@ -1,5 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsOptional, IsArray, IsInt, IsObject, Min } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsArray,
+  IsInt,
+  IsObject,
+  Min,
+  IsBoolean,
+} from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 
 export class CreateProjectDto {
@@ -42,7 +51,10 @@ export class CreateProjectDto {
         const parsed = JSON.parse(value);
         return Array.isArray(parsed) ? parsed : [value];
       } catch {
-        return value.split(',').map(item => item.trim()).filter(Boolean);
+        return value
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean);
       }
     }
     return [value];
@@ -64,7 +76,10 @@ export class CreateProjectDto {
         const parsed = JSON.parse(value);
         return Array.isArray(parsed) ? parsed : [value];
       } catch {
-        return value.split(',').map(item => item.trim()).filter(Boolean);
+        return value
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean);
       }
     }
     return [value];
@@ -86,13 +101,47 @@ export class CreateProjectDto {
         const parsed = JSON.parse(value);
         return Array.isArray(parsed) ? parsed : [value];
       } catch {
-        return value.split(',').map(item => item.trim()).filter(Boolean);
+        return value
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean);
       }
     }
     return [value];
   })
   @IsArray()
   devopsTechs?: string[];
+
+  @ApiPropertyOptional({
+    description: 'Mark project as featured',
+    example: false,
+    default: false,
+  })
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (typeof value === 'string') {
+      return value === 'true';
+    }
+    return value;
+  })
+  @IsBoolean()
+  isFeatured?: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Live project URL',
+    example: 'https://example.com',
+  })
+  @IsString()
+  @IsOptional()
+  liveUrl?: string;
+
+  @ApiPropertyOptional({
+    description: 'GitHub repository URL',
+    example: 'https://github.com/username/repo',
+  })
+  @IsString()
+  @IsOptional()
+  githubUrl?: string;
 
   @ApiPropertyOptional({
     description: 'Design tools and technologies',
@@ -108,7 +157,10 @@ export class CreateProjectDto {
         const parsed = JSON.parse(value);
         return Array.isArray(parsed) ? parsed : [value];
       } catch {
-        return value.split(',').map(item => item.trim()).filter(Boolean);
+        return value
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean);
       }
     }
     return [value];
@@ -130,7 +182,10 @@ export class CreateProjectDto {
         const parsed = JSON.parse(value);
         return Array.isArray(parsed) ? parsed : [value];
       } catch {
-        return value.split(',').map(item => item.trim()).filter(Boolean);
+        return value
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean);
       }
     }
     return [value];
@@ -152,7 +207,10 @@ export class CreateProjectDto {
         const parsed = JSON.parse(value);
         return Array.isArray(parsed) ? parsed : [value];
       } catch {
-        return value.split(',').map(item => item.trim()).filter(Boolean);
+        return value
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean);
       }
     }
     return [value];

@@ -1,7 +1,16 @@
 model FileDocument {
-  id         Int      @id @default(autoincrement())
-  title      String
-  categoryId Int?
-  blocks     Json
-  tags       String[]
+  id            Int          @id @default(autoincrement())
+  title         String?
+  categoryId    Int?
+  blocks        Json?
+  tags          String[]
+  url           String?
+  publicId      String?
+  format        String?
+  resourceType  String?
+  bytes         Int?
+  hireRequestId Int?
+  hireRequest   HireRequest? @relation(fields: [hireRequestId], references: [id], onDelete: Cascade)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 }

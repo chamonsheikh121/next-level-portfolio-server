@@ -1,0 +1,16 @@
+model user_message {
+    id        Int      @id @default(autoincrement())
+    name      String
+    email     String
+    title     String
+    message   String
+    status    MessageStatus @default(unread)
+    createdAt DateTime @default(now())
+}
+
+
+enum MessageStatus {
+    unread
+    read
+    archived
+}

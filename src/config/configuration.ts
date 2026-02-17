@@ -2,7 +2,7 @@ export default () => ({
   port: parseInt(process.env.PORT, 10) || 3000,
   apiPrefix: process.env.API_PREFIX || 'api',
   nodeEnv: process.env.NODE_ENV || 'development',
-  
+
   database: {
     type: process.env.DB_TYPE || 'postgres',
     host: process.env.DB_HOST || 'localhost',
@@ -29,7 +29,8 @@ export default () => ({
     secure: process.env.EMAIL_SECURE === 'true', // true for 465, false for other ports
     user: process.env.EMAIL_USER || '',
     password: process.env.EMAIL_PASSWORD || '',
-    from: process.env.EMAIL_FROM || 'noreply@portfolio.com',
+    from: process.env.EMAIL_FROM || 'noreply@chamonali.me',
+    adminEmail: process.env.ADMIN_EMAIL || 'admin@chamonali.me',
   },
 
   redis: {

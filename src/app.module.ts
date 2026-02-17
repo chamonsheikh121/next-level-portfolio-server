@@ -19,6 +19,8 @@ import { ReviewModule } from './modules/review/review.module';
 import { NpmModule } from './modules/npm/npm.module';
 import { FaqModule } from './modules/faq/faq.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
+import { UserMessageModule } from './modules/user-message/user-message.module';
+import { HireModule } from './modules/hire/hire.module';
 import { DatabaseConfig } from './config/database.config';
 import configuration from './config/configuration';
 import { PrismaModule } from './common/prisma/prisma.module';
@@ -53,6 +55,8 @@ import { JwtService } from '@nestjs/jwt';
     NpmModule,
     FaqModule,
     AnalyticsModule,
+    UserMessageModule,
+    HireModule,
   ],
   controllers: [AppController],
   providers: [

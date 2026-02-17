@@ -1,22 +1,28 @@
 model HireRequest {
-  id               Int      @id @default(autoincrement())
+  id               Int               @id @default(autoincrement())
   name             String?
   companyName      String?
   email            String?
   linkedinUrl      String?
   notes            String?
+  status           HireRequestStatus @default(inprocess)
   projectDesc      String?
+  budget           String?
+  timeline         String?
+  additionalinfo   String?
   serviceId        Int?
   estimateBudget   String?
   expectedTimeline String?
   coreFeatures     String[]
   techSuggestion   String[]
-  files            HireRequestFile[]
+  files            FileDocument[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
 }
 
-model HireRequestFile {
-  id            Int          @id @default(autoincrement())
-  fileId        Int
-  hireRequestId Int
-  hireRequest   HireRequest  @relation(fields: [hireRequestId], references: [id])
+enum HireRequestStatus {
+  inprocess
+  unread
+  read
+  archived
 }

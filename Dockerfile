@@ -43,6 +43,9 @@ COPY --from=builder /app/start.sh ./
 
 RUN chmod +x start.sh
 
+# Set Node.js to prefer IPv4 for DNS resolution (fixes IPv6 connectivity on Render)
+ENV NODE_OPTIONS="--dns-result-order=ipv4first"
+
 EXPOSE 3000
 
 # Run migrations and start the app

@@ -5,10 +5,6 @@ import { AppModule } from './app.module';
 import { GlobalExceptionFilter } from './common/filters/http-exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import * as cookieParser from 'cookie-parser';
-import { setDefaultResultOrder } from 'dns';
-
-// Force IPv4 DNS resolution globally to fix IPv6 connectivity issues on cloud platforms
-setDefaultResultOrder('ipv4first');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

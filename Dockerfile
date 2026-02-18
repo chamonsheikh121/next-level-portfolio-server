@@ -35,7 +35,6 @@ RUN pnpm install --prod --frozen-lockfile --ignore-scripts=false
 # Copy built app and generated Prisma client from builder
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma/generated ./prisma/generated
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 EXPOSE 3000
 

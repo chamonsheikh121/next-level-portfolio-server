@@ -32,15 +32,10 @@ COPY package.json pnpm-lock.yaml ./
 # Enable build scripts for Prisma and install production deps
 RUN pnpm install --prod --frozen-lockfile --ignore-scripts=false
 
-# Copy Prisma files and config
-COPY prisma ./prisma
-COPY prisma.config.ts ./
-
-# Generate Prisma Client (with dummy DATABASE_URL for build)
-ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
-RUN npx prisma generate
-
+# Copy built app and generated Prisma client from builder
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma/generated ./prisma/generated
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 EXPOSE 3000
 

@@ -29,8 +29,8 @@ RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml ./
 
-# Enable build scripts for Prisma and install production deps
-RUN pnpm install --prod --frozen-lockfile --ignore-scripts=false
+# Install ALL dependencies (including dev) for Prisma migrations support
+RUN pnpm install --frozen-lockfile --ignore-scripts=false
 
 # Copy built app and generated Prisma client from builder
 COPY --from=builder /app/dist ./dist
@@ -39,8 +39,11 @@ COPY --from=builder /app/prisma/generated ./prisma/generated
 # Copy Prisma migration files and config
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./
+COPY --from=builder /app/start.sh ./
+
+RUN chmod +x start.sh
 
 EXPOSE 3000
 
 # Run migrations and start the app
-CMD sh -c "npx prisma migrate deploy && node dist/main"
+CMD ["./start.sh"]

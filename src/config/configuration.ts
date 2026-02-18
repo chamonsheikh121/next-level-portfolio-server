@@ -28,7 +28,8 @@ export default () => ({
     port: parseInt(process.env.EMAIL_PORT, 10) || 587,
     secure: process.env.EMAIL_SECURE === 'true', // true for 465, false for other ports
     user: process.env.EMAIL_USER || '',
-    password: process.env.EMAIL_PASSWORD || '',
+    // Remove spaces from password (Gmail app passwords are shown with spaces but should be used without)
+    password: process.env.EMAIL_PASSWORD?.replace(/\s/g, '') || '',
     from: process.env.EMAIL_FROM || 'noreply@chamonali.me',
     adminEmail: process.env.ADMIN_EMAIL || 'admin@chamonali.me',
   },

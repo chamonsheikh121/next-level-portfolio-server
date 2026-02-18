@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
 import { Transporter } from 'nodemailer';
+import type SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 export interface EmailOptions {
   to: string;
@@ -20,32 +21,54 @@ export class EmailService {
   }
 
   private createTransporter() {
-    const emailConfig = {
-      host: this.configService.get<string>('email.host'),
-      port: this.configService.get<number>('email.port'),
-      secure: this.configService.get<boolean>('email.secure'),
-      auth: {
-        user: this.configService.get<string>('email.user'),
-        pass: this.configService.get<string>('email.password'),
-      },
-    };
+    const user = this.configService.get<string>('email.user');
+    const pass = this.configService.get<string>('email.password');
 
     // Skip creating transporter if credentials are not set
-    if (!emailConfig.auth.user || !emailConfig.auth.pass) {
+    if (!user || !pass) {
       this.logger.warn('Email credentials not configured. Emails will be logged to console only.');
       return;
     }
 
+    const emailConfig: SMTPTransport.Options = {
+      host: this.configService.get<string>('email.host'),
+      port: this.configService.get<number>('email.port'),
+      secure: this.configService.get<boolean>('email.secure'),
+      auth: {
+        user,
+        pass,
+      },
+      // Add timeout settings for production (in milliseconds)
+      connectionTimeout: 60000, // 60 seconds
+      greetingTimeout: 30000, // 30 seconds
+      socketTimeout: 60000, // 60 seconds
+      // TLS settings for Gmail
+      tls: {
+        rejectUnauthorized: false,
+      },
+    };
+
+    this.logger.log(
+      `Creating email transporter with host: ${emailConfig.host}:${emailConfig.port}`,
+    );
     this.transporter = nodemailer.createTransport(emailConfig);
 
-    // Verify transporter configuration
-    this.transporter.verify((error, success) => {
-      if (error) {
-        this.logger.error('Email transporter verification failed:', error);
-      } else {
-        this.logger.log('Email transporter is ready to send emails');
-      }
-    });
+    // Verify transporter configuration (async to not block startup)
+    this.transporter
+      .verify()
+      .then(() => {
+        this.logger.log('✅ Email transporter is ready to send emails');
+      })
+      .catch((error) => {
+        this.logger.error('❌ Email transporter verification failed:', {
+          message: error.message,
+          code: error.code,
+          command: error.command,
+        });
+        this.logger.warn(
+          'Email service will still attempt to send emails despite verification failure',
+        );
+      });
   }
 
   async sendEmail(options: EmailOptions): Promise<boolean> {
@@ -60,6 +83,8 @@ export class EmailService {
     }
 
     try {
+      this.logger.log(`Attempting to send email to ${options.to} with subject: ${options.subject}`);
+
       const info = await this.transporter.sendMail({
         from,
         to: options.to,
@@ -68,10 +93,16 @@ export class EmailService {
         html: options.html,
       });
 
-      this.logger.log(`Email sent successfully to ${options.to}: ${info.messageId}`);
+      this.logger.log(`✅ Email sent successfully to ${options.to}: ${info.messageId}`);
       return true;
     } catch (error) {
-      this.logger.error(`Failed to send email to ${options.to}:`, error);
+      this.logger.error(`❌ Failed to send email to ${options.to}:`, {
+        message: error.message,
+        code: error.code,
+        command: error.command,
+        response: error.response,
+        responseCode: error.responseCode,
+      });
       return false;
     }
   }

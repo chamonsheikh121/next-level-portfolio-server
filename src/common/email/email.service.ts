@@ -3,6 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
 import { Transporter } from 'nodemailer';
 import type SMTPTransport from 'nodemailer/lib/smtp-transport';
+import { lookup } from 'dns';
+import { promisify } from 'util';
 
 export interface EmailOptions {
   to: string;
@@ -30,6 +32,11 @@ export class EmailService {
       return;
     }
 
+    // Custom DNS lookup that forces IPv4 only
+    const dnsLookup = (hostname: string, options: any, callback: any) => {
+      lookup(hostname, { family: 4 }, callback);
+    };
+
     const emailConfig: SMTPTransport.Options = {
       host: this.configService.get<string>('email.host'),
       port: this.configService.get<number>('email.port'),
@@ -38,6 +45,8 @@ export class EmailService {
         user,
         pass,
       },
+      // Custom DNS lookup to force IPv4 (fixes ENETUNREACH on IPv6-disabled servers)
+      dnsTimeout: 30000,
       // Add timeout settings for production (in milliseconds)
       connectionTimeout: 60000, // 60 seconds
       greetingTimeout: 30000, // 30 seconds
@@ -46,7 +55,10 @@ export class EmailService {
       tls: {
         rejectUnauthorized: false,
       },
-    };
+    } as any;
+
+    // Apply custom lookup after config creation to bypass TypeScript
+    (emailConfig as any).lookup = dnsLookup;
 
     this.logger.log(
       `Creating email transporter with host: ${emailConfig.host}:${emailConfig.port}`,

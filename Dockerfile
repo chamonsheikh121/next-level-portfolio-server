@@ -13,7 +13,8 @@ RUN pnpm install --frozen-lockfile --ignore-scripts=false
 
 COPY . .
 
-# Generate Prisma Client
+# Generate Prisma Client (with dummy DATABASE_URL for build)
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 RUN npx prisma generate
 
 RUN pnpm build
@@ -35,7 +36,8 @@ RUN pnpm install --prod --frozen-lockfile --ignore-scripts=false
 COPY prisma ./prisma
 COPY prisma.config.ts ./
 
-# Generate Prisma Client
+# Generate Prisma Client (with dummy DATABASE_URL for build)
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 RUN npx prisma generate
 
 COPY --from=builder /app/dist ./dist

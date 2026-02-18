@@ -36,6 +36,11 @@ RUN pnpm install --prod --frozen-lockfile --ignore-scripts=false
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma/generated ./prisma/generated
 
+# Copy Prisma migration files and config
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/prisma.config.ts ./
+
 EXPOSE 3000
 
-CMD ["node", "dist/main"]
+# Run migrations and start the app
+CMD sh -c "npx prisma migrate deploy && node dist/main"

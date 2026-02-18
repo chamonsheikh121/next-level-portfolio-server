@@ -32,12 +32,13 @@ export class EmailService {
       return;
     }
 
-    // Custom DNS lookup that forces IPv4 only
-    const dnsLookup = (hostname: string, options: any, callback: any) => {
+    // Custom DNS lookup that forces IPv4 only to avoid ENETUNREACH errors on Render
+    const ipv4OnlyLookup = (hostname: string, options: any, callback: any) => {
       lookup(hostname, { family: 4 }, callback);
     };
 
-    const emailConfig: SMTPTransport.Options = {
+    // Create config without TypeScript checking to include custom lookup
+    const emailConfig = {
       host: this.configService.get<string>('email.host'),
       port: this.configService.get<number>('email.port'),
       secure: this.configService.get<boolean>('email.secure'),
@@ -45,9 +46,10 @@ export class EmailService {
         user,
         pass,
       },
-      // Custom DNS lookup to force IPv4 (fixes ENETUNREACH on IPv6-disabled servers)
+      // Custom DNS lookup to force IPv4 resolution
+      lookup: ipv4OnlyLookup,
       dnsTimeout: 30000,
-      // Add timeout settings for production (in milliseconds)
+      // Timeout settings for production (in milliseconds)
       connectionTimeout: 60000, // 60 seconds
       greetingTimeout: 30000, // 30 seconds
       socketTimeout: 60000, // 60 seconds
@@ -55,13 +57,12 @@ export class EmailService {
       tls: {
         rejectUnauthorized: false,
       },
-    } as any;
-
-    // Apply custom lookup after config creation to bypass TypeScript
-    (emailConfig as any).lookup = dnsLookup;
+      logger: false,
+      debug: false,
+    };
 
     this.logger.log(
-      `Creating email transporter with host: ${emailConfig.host}:${emailConfig.port}`,
+      `Creating email transporter with host: ${emailConfig.host}:${emailConfig.port} (IPv4 only)`,
     );
     this.transporter = nodemailer.createTransport(emailConfig);
 

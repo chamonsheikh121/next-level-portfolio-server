@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+// import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -21,7 +21,7 @@ import { FaqModule } from './modules/faq/faq.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { UserMessageModule } from './modules/user-message/user-message.module';
 import { HireModule } from './modules/hire/hire.module';
-import { DatabaseConfig } from './config/database.config';
+// import { DatabaseConfig } from './config/database.config';
 import configuration from './config/configuration';
 import { PrismaModule } from './common/prisma/prisma.module';
 import { EmailModule } from './common/email/email.module';
@@ -35,9 +35,9 @@ import { JwtService } from '@nestjs/jwt';
       load: [configuration],
       envFilePath: '.env',
     }),
-    TypeOrmModule.forRootAsync({
-      useClass: DatabaseConfig,
-    }),
+    // TypeOrmModule.forRootAsync({
+    //   useClass: DatabaseConfig,
+    // }),
     PrismaModule,
     EmailModule,
     AuthModule,

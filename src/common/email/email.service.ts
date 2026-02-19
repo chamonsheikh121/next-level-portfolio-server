@@ -1,8 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as nodemailer from 'nodemailer';
-import { Transporter } from 'nodemailer';
-import type SMTPTransport from 'nodemailer/lib/smtp-transport';
+import { MailerSend, EmailParams, Sender, Recipient } from 'mailersend';
 
 export interface EmailOptions {
   to: string;
@@ -14,71 +12,39 @@ export interface EmailOptions {
 @Injectable()
 export class EmailService {
   private readonly logger = new Logger(EmailService.name);
-  private transporter: Transporter;
+  private mailerSend: MailerSend;
+  private fromEmail: string;
+  private fromName: string;
+  private isConfigured: boolean = false;
 
   constructor(private configService: ConfigService) {
-    this.createTransporter();
+    this.initializeMailerSend();
   }
 
-  private createTransporter() {
-    const user = this.configService.get<string>('email.user');
-    const pass = this.configService.get<string>('email.password');
+  private initializeMailerSend() {
+    const apiKey = this.configService.get<string>('email.apiKey');
+    this.fromEmail = this.configService.get<string>('email.fromEmail');
+    this.fromName = this.configService.get<string>('email.fromName');
 
-    // Skip creating transporter if credentials are not set
-    if (!user || !pass) {
-      this.logger.warn('Email credentials not configured. Emails will be logged to console only.');
+    // Skip initialization if API key is not set
+    if (!apiKey) {
+      this.logger.warn('MailerSend API key not configured. Emails will be logged to console only.');
       return;
     }
 
-    const emailConfig: SMTPTransport.Options = {
-      host: this.configService.get<string>('email.host'),
-      port: this.configService.get<number>('email.port'),
-      secure: this.configService.get<boolean>('email.secure'),
-      auth: {
-        user,
-        pass,
-      },
-      dnsTimeout: 30000,
-      // Timeout settings for production (in milliseconds)
-      connectionTimeout: 60000, // 60 seconds
-      greetingTimeout: 30000, // 30 seconds
-      socketTimeout: 60000, // 60 seconds
-      // TLS settings for Gmail
-      tls: {
-        rejectUnauthorized: false,
-      },
-    };
+    this.mailerSend = new MailerSend({
+      apiKey: apiKey,
+    });
 
-    this.logger.log(
-      `Creating email transporter with host: ${emailConfig.host}:${emailConfig.port}`,
-    );
-    this.transporter = nodemailer.createTransport(emailConfig);
-
-    // Verify transporter configuration (async to not block startup)
-    this.transporter
-      .verify()
-      .then(() => {
-        this.logger.log('✅ Email transporter is ready to send emails');
-      })
-      .catch((error) => {
-        this.logger.error('❌ Email transporter verification failed:', {
-          message: error.message,
-          code: error.code,
-          command: error.command,
-        });
-        this.logger.warn(
-          'Email service will still attempt to send emails despite verification failure',
-        );
-      });
+    this.isConfigured = true;
+    this.logger.log('✅ MailerSend API client initialized successfully');
   }
 
   async sendEmail(options: EmailOptions): Promise<boolean> {
-    const from = this.configService.get<string>('email.from');
-
-    // If transporter is not configured, just log the email
-    if (!this.transporter) {
+    // If API is not configured, just log the email
+    if (!this.isConfigured) {
       this.logger.log(
-        `📧 Email to be sent (no transporter configured):\nTo: ${options.to}\nSubject: ${options.subject}\n${options.text || options.html}`,
+        `📧 Email to be sent (no API key configured):\nTo: ${options.to}\nSubject: ${options.subject}\n${options.text || options.html}`,
       );
       return true;
     }
@@ -86,23 +52,25 @@ export class EmailService {
     try {
       this.logger.log(`Attempting to send email to ${options.to} with subject: ${options.subject}`);
 
-      const info = await this.transporter.sendMail({
-        from,
-        to: options.to,
-        subject: options.subject,
-        text: options.text,
-        html: options.html,
-      });
+      const sentFrom = new Sender(this.fromEmail, this.fromName);
+      const recipients = [new Recipient(options.to, options.to)];
 
-      this.logger.log(`✅ Email sent successfully to ${options.to}: ${info.messageId}`);
+      const emailParams = new EmailParams()
+        .setFrom(sentFrom)
+        .setTo(recipients)
+        .setSubject(options.subject)
+        .setHtml(options.html)
+        .setText(options.text || '');
+
+      const response = await this.mailerSend.email.send(emailParams);
+
+      this.logger.log(`✅ Email sent successfully to ${options.to}`);
       return true;
     } catch (error) {
       this.logger.error(`❌ Failed to send email to ${options.to}:`, {
         message: error.message,
-        code: error.code,
-        command: error.command,
-        response: error.response,
-        responseCode: error.responseCode,
+        statusCode: error.statusCode,
+        body: error.body,
       });
       return false;
     }

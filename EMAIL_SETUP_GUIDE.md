@@ -5,6 +5,7 @@
 ### 1. Redis Installation (Required for BullMQ)
 
 **Windows:**
+
 ```bash
 # Using Chocolatey
 choco install redis
@@ -13,42 +14,50 @@ choco install redis
 ```
 
 **macOS:**
+
 ```bash
 brew install redis
 brew services start redis
 ```
 
 **Linux:**
+
 ```bash
 sudo apt-get install redis-server
 sudo systemctl start redis
 ```
 
 **Docker (Recommended):**
+
 ```bash
 docker run -d -p 6379:6379 --name portfolio-redis redis:alpine
 ```
 
-### 2. Gmail App Password Setup
+### 2. MailerSend API Key Setup
 
-To send emails via Gmail, you need to create an App Password:
+To send emails via MailerSend API, you need to create an API token:
 
-1. **Enable 2-Factor Authentication:**
-   - Go to your Google Account: https://myaccount.google.com/
-   - Navigate to Security
-   - Enable 2-Step Verification
+1. **Create MailerSend Account:**
+   - Go to: https://www.mailersend.com/
+   - Sign up for a free account (up to 12,000 emails/month)
 
-2. **Create App Password:**
-   - Go to: https://myaccount.google.com/apppasswords
-   - Select app: "Mail"
-   - Select device: "Other (Custom name)" - enter "Portfolio Server"
-   - Click "Generate"
-   - Copy the 16-character password
+2. **Verify Your Domain (Optional but Recommended):**
+   - Go to Domains section in MailerSend dashboard
+   - Add and verify your domain for better deliverability
+   - Or use the trial domain provided by MailerSend
 
-3. **Update .env:**
+3. **Create API Token:**
+   - Navigate to: Settings → API Tokens
+   - Click "Create token"
+   - Give it a name (e.g., "Portfolio Server")
+   - Select "Full access" or specific permissions
+   - Copy the generated API token (starts with "mlsn.")
+
+4. **Update .env:**
    ```env
-   EMAIL_USER=your-email@gmail.com
-   EMAIL_PASSWORD=xxxx xxxx xxxx xxxx  # The 16-character app password
+   EMAIL_API_KEY=mlsn.your-api-key-here
+   EMAIL_FROM=noreply@yourdomain.com
+   EMAIL_FROM_NAME=Portfolio
    ```
 
 ## Environment Variables
@@ -56,13 +65,11 @@ To send emails via Gmail, you need to create an App Password:
 Add these to your `.env` file:
 
 ```env
-# Email Configuration (Gmail)
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_SECURE=false
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASSWORD=your-16-char-app-password
-EMAIL_FROM="Portfolio <noreply@portfolio.com>"
+# Email Configuration (MailerSend API)
+EMAIL_API_KEY=mlsn.your-api-key-here
+EMAIL_FROM=noreply@yourdomain.com
+EMAIL_FROM_NAME=Portfolio
+ADMIN_EMAIL=admin@yourdomain.com
 
 # Redis Configuration
 REDIS_HOST=localhost
@@ -73,6 +80,7 @@ REDIS_PASSWORD=
 ## Testing Email System
 
 ### 1. Start Redis
+
 ```bash
 # If using Docker
 docker start portfolio-redis
@@ -82,6 +90,7 @@ redis-server
 ```
 
 ### 2. Start the Application
+
 ```bash
 npm run dev
 ```
@@ -89,6 +98,7 @@ npm run dev
 ### 3. Test Email Sending
 
 **Login (triggers OTP email):**
+
 ```bash
 curl -X POST http://localhost:3000/api/auth/login \
   -H "Content-Type: application/json" \
@@ -96,6 +106,7 @@ curl -X POST http://localhost:3000/api/auth/login \
 ```
 
 **Create User (triggers welcome email):**
+
 ```bash
 curl -X POST http://localhost:3000/api/users \
   -H "Content-Type: application/json" \
@@ -106,12 +117,14 @@ curl -X POST http://localhost:3000/api/users \
 ## Email Types
 
 ### 1. OTP Email
+
 - **Trigger:** User login or OTP resend
 - **Contains:** 6-digit OTP code
 - **Expiry:** 10 minutes
 - **Template:** Professional HTML email with OTP display
 
 ### 2. Welcome Email
+
 - **Trigger:** New user creation
 - **Contains:** Welcome message and instructions
 
@@ -137,6 +150,7 @@ npm install @bull-board/express @bull-board/api
 ### Emails Not Sending?
 
 1. **Check Redis:**
+
    ```bash
    redis-cli ping  # Should return "PONG"
    ```
@@ -169,6 +183,7 @@ When credentials are not configured, emails will be logged to the console instea
 ## Alternative Email Providers
 
 ### SendGrid
+
 ```env
 EMAIL_HOST=smtp.sendgrid.net
 EMAIL_PORT=587
@@ -177,6 +192,7 @@ EMAIL_PASSWORD=your-sendgrid-api-key
 ```
 
 ### AWS SES
+
 ```env
 EMAIL_HOST=email-smtp.us-east-1.amazonaws.com
 EMAIL_PORT=587
@@ -185,6 +201,7 @@ EMAIL_PASSWORD=your-smtp-password
 ```
 
 ### Mailgun
+
 ```env
 EMAIL_HOST=smtp.mailgun.org
 EMAIL_PORT=587

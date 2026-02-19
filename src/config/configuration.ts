@@ -24,13 +24,9 @@ export default () => ({
   },
 
   email: {
-    host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-    port: parseInt(process.env.EMAIL_PORT, 10) || 587,
-    secure: process.env.EMAIL_SECURE === 'true', // true for 465, false for other ports
-    user: process.env.EMAIL_USER || '',
-    // Remove spaces from password (Gmail app passwords are shown with spaces but should be used without)
-    password: process.env.EMAIL_PASSWORD?.replace(/\s/g, '') || '',
-    from: process.env.EMAIL_FROM || 'noreply@chamonali.me',
+    apiKey: process.env.EMAIL_API_KEY || '',
+    fromEmail: process.env.EMAIL_FROM || 'noreply@chamonali.me',
+    fromName: process.env.EMAIL_FROM_NAME || 'Portfolio',
     adminEmail: process.env.ADMIN_EMAIL || 'admin@chamonali.me',
   },
 

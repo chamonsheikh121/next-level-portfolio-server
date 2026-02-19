@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
 import { ConfigService } from '@nestjs/config';
 import { EmailService } from './email.service';
@@ -9,22 +9,38 @@ import { EmailQueueService } from './email-queue.service';
   imports: [
     BullModule.forRootAsync({
       useFactory: (configService: ConfigService) => {
-        const redisUrl = configService.get<string>('redis.url');
+        const logger = new Logger('BullMQ-Config');
 
-        // If REDIS_URL is provided (e.g., on Render), parse it
+        // 🔥 IMPORTANT: Use direct ENV key (production safe)
+        const redisUrl = configService.get<string>('REDIS_URL');
+
+        logger.log(`REDIS_URL from ENV: ${redisUrl ? 'FOUND ✅' : 'NOT FOUND ❌'}`);
+
         if (redisUrl) {
-          const url = new URL(redisUrl);
-          return {
-            connection: {
-              host: url.hostname,
-              port: parseInt(url.port) || 6379,
-              password: url.password || undefined,
-              username: url.username || undefined,
-            },
-          };
+          try {
+            const url = new URL(redisUrl);
+
+            logger.log(`Connecting to Redis at host: ${url.hostname}`);
+            logger.log(`Port: ${url.port}`);
+            logger.log(`Username: ${url.username || 'none'}`);
+
+            return {
+              connection: {
+                host: url.hostname,
+                port: parseInt(url.port) || 6379,
+                username: url.username || undefined,
+                password: url.password || undefined,
+              },
+            };
+          } catch (error) {
+            logger.error('Failed to parse REDIS_URL', error);
+            throw error;
+          }
         }
 
-        // Otherwise use individual host/port/password (local development)
+        // Fallback (local dev)
+        logger.warn('Using local Redis fallback configuration');
+
         return {
           connection: {
             host: configService.get<string>('redis.host'),
@@ -35,6 +51,7 @@ import { EmailQueueService } from './email-queue.service';
       },
       inject: [ConfigService],
     }),
+
     BullModule.registerQueue({
       name: 'email',
     }),

@@ -1,52 +1,52 @@
+# Builder Stage
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Install pnpm and openssl (required for Prisma)
-RUN apk add --no-cache openssl
+# Install pnpm
 RUN npm install -g pnpm
 
+# Copy package files
 COPY package.json pnpm-lock.yaml ./
 
-# Enable build scripts for Prisma and install
-RUN pnpm install --frozen-lockfile --ignore-scripts=false
+# Install all dependencies (including dev)
+RUN pnpm install --frozen-lockfile
 
+# Copy app files
 COPY . .
 
-# Generate Prisma Client (with dummy DATABASE_URL for build)
-ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
-RUN npx prisma generate
+# Generate Prisma client and build (dummy DB URL for generation only)
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy?schema=public"
+RUN pnpm prisma generate && pnpm build
 
-RUN pnpm build
-
+# Production Stage
 FROM node:20-alpine AS production
 
 WORKDIR /app
 
-# Install pnpm and openssl (required for Prisma)
-RUN apk add --no-cache openssl
+# Install pnpm
 RUN npm install -g pnpm
 
+# Copy package files
 COPY package.json pnpm-lock.yaml ./
 
-# Install ALL dependencies (including dev) for Prisma migrations support
-RUN pnpm install --frozen-lockfile --ignore-scripts=false
+# Install only production dependencies
+RUN pnpm install --prod --frozen-lockfile
 
-# Copy built app and generated Prisma client from builder
+# Install prisma CLI and TypeScript tools for prisma.config.ts
+RUN pnpm add prisma ts-node typescript @types/node dotenv
+
+# Copy built files and generated Prisma client from builder
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/prisma/generated ./prisma/generated
-
-# Copy Prisma migration files and config
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/prisma.config.ts ./
-COPY --from=builder /app/start.sh ./
+COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
+COPY --from=builder /app/tsconfig.json ./tsconfig.json
+COPY --from=builder /app/start.sh ./start.sh
 
-RUN chmod +x start.sh
-
-# Set Node.js to prefer IPv4 for DNS resolution (fixes IPv6 connectivity on Render)
-ENV NODE_OPTIONS="--dns-result-order=ipv4first"
+# Generate Prisma client in production (dummy DB URL for generation only)
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy?schema=public"
+RUN pnpm prisma generate
 
 EXPOSE 3000
 
-# Run migrations and start the app
-CMD ["./start.sh"]
+CMD ["sh", "start.sh"]

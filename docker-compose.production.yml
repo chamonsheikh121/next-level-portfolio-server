@@ -37,29 +37,23 @@ services:
       timeout: 5s
       retries: 5
 
-  # app:
-  #   image: chamonali121/next_level_portfolio_server:latest
-  #   container_name: portfolio_app
-  #   env_file:
-  #     - .env.production
-  #   environment:
-  #     NODE_ENV: production
-  #     PORT: 3000
-  #     DATABASE_URL: postgresql://postgres:postgres@postgres:5432/portfolio_db?schema=public
-  #     REDIS_HOST: redis
-  #     REDIS_PORT: 6379
-  #   ports:
-  #     - '3000:3000'
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #     redis:
-  #       condition: service_healthy
-  #   networks:
-  #     - portfolio_network
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ./uploads:/app/uploads
+  app:
+    image: chamonali121/next_level_portfolio_server:latest
+    container_name: portfolio_app
+    env_file:
+      - .env.production
+    ports:
+      - '3000:3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - portfolio_network
+    restart: unless-stopped
+    volumes:
+      - ./uploads:/app/uploads
 
 volumes:
   postgres_data:

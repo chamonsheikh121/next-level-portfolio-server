@@ -1,6 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { MailerSend, EmailParams, Sender, Recipient } from 'mailersend';
+import * as nodemailer from 'nodemailer';
+import { Transporter } from 'nodemailer';
+
+// MailerSend (commented out - using Gmail SMTP instead)
+// import { MailerSend, EmailParams, Sender, Recipient } from 'mailersend';
 
 export interface EmailOptions {
   to: string;
@@ -12,15 +16,46 @@ export interface EmailOptions {
 @Injectable()
 export class EmailService {
   private readonly logger = new Logger(EmailService.name);
-  private mailerSend: MailerSend;
+  private transporter: Transporter;
+  // private mailerSend: MailerSend; // Commented out - using Nodemailer
   private fromEmail: string;
   private fromName: string;
   private isConfigured: boolean = false;
 
   constructor(private configService: ConfigService) {
-    this.initializeMailerSend();
+    this.initializeEmailTransporter();
   }
 
+  private initializeEmailTransporter() {
+    const smtpUser = this.configService.get<string>('email.smtpUser');
+    const smtpPassword = this.configService.get<string>('email.smtpPassword');
+    this.fromEmail = this.configService.get<string>('email.fromEmail');
+    this.fromName = this.configService.get<string>('email.fromName');
+
+    // Skip initialization if SMTP credentials are not set
+    if (!smtpUser || !smtpPassword) {
+      this.logger.warn(
+        'Gmail SMTP credentials not configured. Emails will be logged to console only.',
+      );
+      return;
+    }
+
+    // Create Nodemailer transporter with Gmail SMTP
+    this.transporter = nodemailer.createTransport({
+      host: this.configService.get<string>('email.smtpHost'),
+      port: this.configService.get<number>('email.smtpPort'),
+      secure: this.configService.get<boolean>('email.smtpSecure'), // true for 465, false for other ports
+      auth: {
+        user: smtpUser,
+        pass: smtpPassword, // Use App Password for Gmail
+      },
+    });
+
+    this.isConfigured = true;
+    this.logger.log('✅ Gmail SMTP transporter initialized successfully');
+  }
+
+  /* MAILERSEND CODE - COMMENTED OUT
   private initializeMailerSend() {
     const apiKey = this.configService.get<string>('email.apiKey');
     this.fromEmail = this.configService.get<string>('email.fromEmail');
@@ -39,7 +74,38 @@ export class EmailService {
     this.isConfigured = true;
     this.logger.log('✅ MailerSend API client initialized successfully');
   }
+  */
 
+  async sendEmail(options: EmailOptions): Promise<boolean> {
+    // If SMTP is not configured, just log the email
+    if (!this.isConfigured) {
+      this.logger.log(
+        `📧 Email to be sent (SMTP not configured):\nTo: ${options.to}\nSubject: ${options.subject}\n${options.text || options.html}`,
+      );
+      return true;
+    }
+
+    try {
+      this.logger.log(`Attempting to send email to ${options.to} with subject: ${options.subject}`);
+
+      // Send email using Nodemailer
+      await this.transporter.sendMail({
+        from: `"${this.fromName}" <${this.fromEmail}>`,
+        to: options.to,
+        subject: options.subject,
+        html: options.html,
+        text: options.text || '',
+      });
+
+      this.logger.log(`✅ Email sent successfully to ${options.to}`);
+      return true;
+    } catch (error) {
+      this.logger.error(`❌ Failed to send email to ${options.to}:`, error.message);
+      return false;
+    }
+  }
+
+  /* MAILERSEND CODE - COMMENTED OUT
   async sendEmail(options: EmailOptions): Promise<boolean> {
     // If API is not configured, just log the email
     if (!this.isConfigured) {
@@ -75,6 +141,7 @@ export class EmailService {
       return false;
     }
   }
+  */
 
   /**
    * Send OTP email
@@ -541,7 +608,7 @@ export class EmailService {
             .tech-tag { background: #3b82f6; color: white; padding: 6px 14px; border-radius: 16px; font-size: 13px; font-weight: 500; }
             .cta-box { background: #fef3c7; border: 2px solid #f59e0b; padding: 20px; border-radius: 8px; margin: 25px 0; text-align: center; }
             .cta-text { margin: 0 0 15px 0; color: #92400e; font-size: 15px; font-weight: 600; }
-            .cta-button { background: #DC2626; color: white; padding: 12px 30px; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600; }
+            .cta-button { background: #10b981; color: white; padding: 12px 30px; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600; }
             .footer { background: #f9fafb; padding: 20px 30px; border-top: 1px solid #e5e7eb; text-align: center; color: #6b7280; font-size: 12px; }
             .timestamp { color: #9ca3af; font-size: 13px; margin-top: 10px; }
           </style>

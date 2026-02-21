@@ -24,7 +24,16 @@ export default () => ({
   },
 
   email: {
-    apiKey: process.env.EMAIL_API_KEY || '',
+    // MailerSend (commented out - using Gmail SMTP instead)
+    // apiKey: process.env.EMAIL_API_KEY || '',
+    
+    // Gmail SMTP Configuration
+    smtpHost: process.env.SMTP_HOST || 'smtp.gmail.com',
+    smtpPort: parseInt(process.env.SMTP_PORT, 10) || 587,
+    smtpSecure: process.env.SMTP_SECURE === 'true', // false for TLS
+    smtpUser: process.env.SMTP_USER || '',
+    smtpPassword: process.env.SMTP_PASSWORD || '', // App password for Gmail
+    
     fromEmail: process.env.EMAIL_FROM || 'noreply@chamonali.me',
     fromName: process.env.EMAIL_FROM_NAME || 'Portfolio',
     adminEmail: process.env.ADMIN_EMAIL || 'admin@chamonali.me',

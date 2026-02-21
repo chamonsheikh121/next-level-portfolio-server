@@ -27,25 +27,16 @@ export class HireService {
         },
       });
 
-      // Send confirmation email to client
-      await this.emailQueueService.sendHireRequestConfirmation(
-        hireRequest.email,
-        hireRequest.name,
-        hireRequest.projectDesc || 'New project inquiry',
-        hireRequest.budget,
-        hireRequest.timeline,
-      );
-
-      // Send notification email to admin
+      // Send notification email to admin only (not to client)
       await this.emailQueueService.sendAdminHireRequestNotification(
-        hireRequest.name,
+        hireRequest.name || 'New client',
         hireRequest.email,
-        hireRequest.projectDesc || 'New project inquiry',
-        hireRequest.companyName,
+        hireRequest.projectDesc || 'New project inquiry not submitted full query yet',
+        hireRequest.companyName || 'New client',
         hireRequest.budget,
         hireRequest.timeline,
-        hireRequest.coreFeatures,
-        hireRequest.techSuggestion,
+        hireRequest.coreFeatures || ["new client"],
+        hireRequest.techSuggestion || ["new client"],
       );
 
       return {

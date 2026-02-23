@@ -168,12 +168,12 @@ export class EmailService {
           <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .header { background: linear-gradient(135deg, #1e3a8a 0%, #334155 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
             .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
-            .otp-box { background: white; border: 2px dashed #667eea; border-radius: 8px; padding: 20px; text-align: center; margin: 20px 0; }
-            .otp-code { font-size: 32px; font-weight: bold; color: #667eea; letter-spacing: 8px; }
+            .otp-box { background: white; border: 2px dashed #475569; border-radius: 8px; padding: 20px; text-align: center; margin: 20px 0; }
+            .otp-code { font-size: 32px; font-weight: bold; color: #1e40af; letter-spacing: 8px; }
             .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
-            .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin: 20px 0; }
+            .warning { background: #fef3c7; border-left: 4px solid #d97706; padding: 12px; margin: 20px 0; }
           </style>
         </head>
         <body>
@@ -222,7 +222,7 @@ export class EmailService {
           <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .header { background: linear-gradient(135deg, #1e3a8a 0%, #334155 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
             .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
           </style>
         </head>
@@ -271,9 +271,9 @@ export class EmailService {
           <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .header { background: linear-gradient(135deg, #1e3a8a 0%, #334155 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
             .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
-            .message-box { background: white; border-left: 4px solid #667eea; padding: 15px; margin: 20px 0; border-radius: 4px; }
+            .message-box { background: white; border-left: 4px solid #475569; padding: 15px; margin: 20px 0; border-radius: 4px; }
             .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
             .checkmark { font-size: 48px; text-align: center; margin: 20px 0; }
           </style>
@@ -344,12 +344,12 @@ export class EmailService {
           <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .header { background: linear-gradient(135deg, #334155 0%, #475569 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
             .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
             .info-row { display: flex; margin: 10px 0; }
             .info-label { font-weight: bold; min-width: 100px; color: #666; }
             .message-box { background: white; border: 1px solid #ddd; padding: 20px; margin: 20px 0; border-radius: 8px; }
-            .badge { background: #FF6B6B; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; display: inline-block; margin-left: 10px; }
+            .badge { background: #475569; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; display: inline-block; margin-left: 10px; }
           </style>
         </head>
         <body>
@@ -424,26 +424,26 @@ export class EmailService {
           <style>
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }
             .container { max-width: 650px; margin: 20px auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-            .header { background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%); color: white; padding: 40px 30px; text-align: center; }
+            .header { background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%); color: white; padding: 40px 30px; text-align: center; }
             .header h1 { margin: 0; font-size: 28px; font-weight: 600; }
             .header p { margin: 10px 0 0 0; font-size: 16px; opacity: 0.95; }
             .content { padding: 40px 30px; }
             .greeting { font-size: 18px; color: #1f2937; margin-bottom: 20px; }
-            .success-badge { background: #10b981; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; display: inline-block; margin: 20px 0; }
-            .project-box { background: #f8fafc; border-left: 4px solid #4F46E5; padding: 20px; margin: 25px 0; border-radius: 8px; }
-            .project-box h3 { margin: 0 0 15px 0; color: #4F46E5; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+            .success-badge { background: #059669; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; display: inline-block; margin: 20px 0; }
+            .project-box { background: #f8fafc; border-left: 4px solid #1e40af; padding: 20px; margin: 25px 0; border-radius: 8px; }
+            .project-box h3 { margin: 0 0 15px 0; color: #1e40af; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
             .project-desc { color: #4b5563; font-size: 15px; line-height: 1.7; }
             .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 25px 0; }
             .info-card { background: white; border: 2px solid #e5e7eb; padding: 15px; border-radius: 8px; text-align: center; }
             .info-label { color: #6b7280; font-size: 12px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 5px; }
             .info-value { color: #1f2937; font-size: 16px; font-weight: 600; }
-            .next-steps { background: #eff6ff; border: 1px solid #93c5fd; padding: 20px; border-radius: 8px; margin: 25px 0; }
-            .next-steps h3 { margin: 0 0 12px 0; color: #1e40af; font-size: 16px; }
+            .next-steps { background: #dbeafe; border: 1px solid #60a5fa; padding: 20px; border-radius: 8px; margin: 25px 0; }
+            .next-steps h3 { margin: 0 0 12px 0; color: #1e3a8a; font-size: 16px; }
             .next-steps ul { margin: 0; padding-left: 20px; }
-            .next-steps li { color: #1e40af; margin: 8px 0; }
+            .next-steps li { color: #1e3a8a; margin: 8px 0; }
             .cta-box { text-align: center; margin: 30px 0; }
-            .note { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 20px 0; border-radius: 4px; }
-            .note-text { margin: 0; color: #92400e; font-size: 14px; }
+            .note { background: #fef3c7; border-left: 4px solid #d97706; padding: 15px; margin: 20px 0; border-radius: 4px; }
+            .note-text { margin: 0; color: #78350f; font-size: 14px; }
             .footer { background: #f9fafb; padding: 25px 30px; border-top: 1px solid #e5e7eb; text-align: center; }
             .footer-text { color: #6b7280; font-size: 13px; margin: 5px 0; }
             .signature { margin-top: 30px; padding-top: 20px; border-top: 2px solid #e5e7eb; }
@@ -582,12 +582,12 @@ export class EmailService {
           <style>
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }
             .container { max-width: 700px; margin: 20px auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-            .header { background: linear-gradient(135deg, #DC2626 0%, #F97316 100%); color: white; padding: 35px 30px; }
+            .header { background: linear-gradient(135deg, #0f766e 0%, #334155 100%); color: white; padding: 35px 30px; }
             .header h1 { margin: 0; font-size: 26px; font-weight: 600; }
             .badge { background: rgba(255,255,255,0.2); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; display: inline-block; margin-top: 10px; font-weight: 600; }
             .content { padding: 35px 30px; }
-            .alert-box { background: #fee2e2; border-left: 4px solid #DC2626; padding: 15px 20px; margin-bottom: 25px; border-radius: 6px; }
-            .alert-text { margin: 0; color: #991b1b; font-weight: 600; font-size: 15px; }
+            .alert-box { background: #dbeafe; border-left: 4px solid #1e40af; padding: 15px 20px; margin-bottom: 25px; border-radius: 6px; }
+            .alert-text { margin: 0; color: #1e3a8a; font-weight: 600; font-size: 15px; }
             .client-info { background: #f8fafc; padding: 25px; border-radius: 10px; margin: 20px 0; border: 2px solid #e2e8f0; }
             .info-row { display: flex; padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
             .info-row:last-child { border-bottom: none; }
@@ -596,19 +596,19 @@ export class EmailService {
             .info-value a { color: #2563eb; text-decoration: none; }
             .info-value a:hover { text-decoration: underline; }
             .section { margin: 25px 0; }
-            .section-title { color: #DC2626; font-size: 16px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; }
+            .section-title { color: #0f766e; font-size: 16px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; }
             .project-desc { background: white; border: 2px solid #e2e8f0; padding: 20px; border-radius: 8px; color: #334155; line-height: 1.7; font-size: 15px; }
-            .features-list { background: #f0fdf4; border-left: 4px solid #22c55e; padding: 20px; border-radius: 6px; margin: 15px 0; }
-            .features-list h4 { margin: 0 0 12px 0; color: #166534; font-size: 15px; }
+            .features-list { background: #ecfdf5; border-left: 4px solid #059669; padding: 20px; border-radius: 6px; margin: 15px 0; }
+            .features-list h4 { margin: 0 0 12px 0; color: #065f46; font-size: 15px; }
             .features-list ul { margin: 0; padding-left: 20px; }
-            .features-list li { color: #166534; margin: 6px 0; }
-            .tech-list { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 20px; border-radius: 6px; margin: 15px 0; }
-            .tech-list h4 { margin: 0 0 12px 0; color: #1e40af; font-size: 15px; }
+            .features-list li { color: #065f46; margin: 6px 0; }
+            .tech-list { background: #eff6ff; border-left: 4px solid #1e40af; padding: 20px; border-radius: 6px; margin: 15px 0; }
+            .tech-list h4 { margin: 0 0 12px 0; color: #1e3a8a; font-size: 15px; }
             .tech-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-            .tech-tag { background: #3b82f6; color: white; padding: 6px 14px; border-radius: 16px; font-size: 13px; font-weight: 500; }
-            .cta-box { background: #fef3c7; border: 2px solid #f59e0b; padding: 20px; border-radius: 8px; margin: 25px 0; text-align: center; }
-            .cta-text { margin: 0 0 15px 0; color: #92400e; font-size: 15px; font-weight: 600; }
-            .cta-button { background: #10b981; color: white; padding: 12px 30px; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600; }
+            .tech-tag { background: #1e40af; color: white; padding: 6px 14px; border-radius: 16px; font-size: 13px; font-weight: 500; }
+            .cta-box { background: #fef3c7; border: 2px solid #d97706; padding: 20px; border-radius: 8px; margin: 25px 0; text-align: center; }
+            .cta-text { margin: 0 0 15px 0; color: #78350f; font-size: 15px; font-weight: 600; }
+            .cta-button { background: #059669; color: white; padding: 12px 30px; border-radius: 6px; text-decoration: none; display: inline-block; font-weight: 600; }
             .footer { background: #f9fafb; padding: 20px 30px; border-top: 1px solid #e5e7eb; text-align: center; color: #6b7280; font-size: 12px; }
             .timestamp { color: #9ca3af; font-size: 13px; margin-top: 10px; }
           </style>
@@ -648,7 +648,7 @@ export class EmailService {
                     ? `
                 <div class="info-row">
                   <span class="info-label">💰 Budget:</span>
-                  <span class="info-value"><strong style="color: #DC2626;">${budget}</strong></span>
+                  <span class="info-value"><strong style="color: #0f766e;">${budget}</strong></span>
                 </div>
                 `
                     : ''

@@ -14,18 +14,12 @@ export class ExperienceService {
   /**
    * Create a new experience
    */
-  async createExperience(
-    createExperienceDto: CreateExperienceDto,
-    image?: Express.Multer.File,
-  ) {
+  async createExperience(createExperienceDto: CreateExperienceDto, image?: Express.Multer.File) {
     let imageURL: string | undefined;
 
     // Upload image to Cloudinary if provided
     if (image) {
-      const uploadResult = await this.cloudinaryService.uploadFile(
-        image,
-        'portfolio/experiences',
-      );
+      const uploadResult = await this.cloudinaryService.uploadFile(image, 'portfolio/experiences');
       imageURL = uploadResult.secure_url;
     }
 
@@ -108,10 +102,7 @@ export class ExperienceService {
 
     // Upload new image to Cloudinary if provided
     if (image) {
-      const uploadResult = await this.cloudinaryService.uploadFile(
-        image,
-        'portfolio/experiences',
-      );
+      const uploadResult = await this.cloudinaryService.uploadFile(image, 'portfolio/experiences');
       updateData.imageURL = uploadResult.secure_url;
 
       // Delete old image from Cloudinary if it exists

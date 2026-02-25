@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsOptional, IsString, IsEnum } from 'class-validator';
 import { DeveloperStatus } from '../../../../prisma/generated/prisma/enums';
 
-
 export class UpdateProfileDto {
   @ApiProperty({ required: false, example: 'john@example.com' })
   @IsOptional()

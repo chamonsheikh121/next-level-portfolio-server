@@ -130,7 +130,8 @@ export class FaqController {
       example: {
         id: 1,
         question: 'What services do you offer?',
-        answer: 'I offer full-stack web development, mobile app development, and UI/UX design services.',
+        answer:
+          'I offer full-stack web development, mobile app development, and UI/UX design services.',
         categoryId: 1,
         category: {
           id: 1,

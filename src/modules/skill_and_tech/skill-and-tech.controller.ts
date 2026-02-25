@@ -40,8 +40,8 @@ export class SkillAndTechController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Create a new skill' })
-  @ApiResponse({ 
-    status: 201, 
+  @ApiResponse({
+    status: 201,
     description: 'Skill created successfully',
     schema: {
       example: {
@@ -51,13 +51,13 @@ export class SkillAndTechController {
           id: 1,
           name: 'Frontend Development',
           description: 'Building modern user interfaces',
-          technologies: []
-        }
-      }
-    }
+          technologies: [],
+        },
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 401, 
+  @ApiResponse({
+    status: 401,
     description: 'Unauthorized',
     schema: {
       example: {
@@ -67,12 +67,12 @@ export class SkillAndTechController {
         path: '/skill-and-tech/skills',
         method: 'POST',
         error: 'Unauthorized',
-        message: 'Unauthorized'
-      }
-    }
+        message: 'Unauthorized',
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 409, 
+  @ApiResponse({
+    status: 409,
     description: 'Skill with this name already exists',
     schema: {
       example: {
@@ -82,9 +82,9 @@ export class SkillAndTechController {
         path: '/skill-and-tech/skills',
         method: 'POST',
         error: 'Conflict',
-        message: 'Skill with name "Frontend Development" already exists'
-      }
-    }
+        message: 'Skill with name "Frontend Development" already exists',
+      },
+    },
   })
   createSkill(@Body() createSkillDto: CreateSkillDto) {
     return this.skillAndTechService.createSkill(createSkillDto);
@@ -95,8 +95,8 @@ export class SkillAndTechController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update a skill' })
   @ApiParam({ name: 'id', description: 'Skill ID' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Skill updated successfully',
     schema: {
       example: {
@@ -106,13 +106,13 @@ export class SkillAndTechController {
           id: 1,
           name: 'Frontend Development',
           description: 'Building modern user interfaces',
-          technologies: []
-        }
-      }
-    }
+          technologies: [],
+        },
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 401, 
+  @ApiResponse({
+    status: 401,
     description: 'Unauthorized',
     schema: {
       example: {
@@ -122,12 +122,12 @@ export class SkillAndTechController {
         path: '/skill-and-tech/skills/1',
         method: 'PATCH',
         error: 'Unauthorized',
-        message: 'Unauthorized'
-      }
-    }
+        message: 'Unauthorized',
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 404, 
+  @ApiResponse({
+    status: 404,
     description: 'Skill not found',
     schema: {
       example: {
@@ -137,12 +137,12 @@ export class SkillAndTechController {
         path: '/skill-and-tech/skills/999',
         method: 'PATCH',
         error: 'Not Found',
-        message: 'Skill with ID 999 not found'
-      }
-    }
+        message: 'Skill with ID 999 not found',
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 409, 
+  @ApiResponse({
+    status: 409,
     description: 'Skill with this name already exists',
     schema: {
       example: {
@@ -152,25 +152,23 @@ export class SkillAndTechController {
         path: '/skill-and-tech/skills/1',
         method: 'PATCH',
         error: 'Conflict',
-        message: 'Skill with name "Frontend Development" already exists'
-      }
-    }
+        message: 'Skill with name "Frontend Development" already exists',
+      },
+    },
   })
-  updateSkill(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateSkillDto: UpdateSkillDto,
-  ) {
+  updateSkill(@Param('id', ParseIntPipe) id: number, @Body() updateSkillDto: UpdateSkillDto) {
     return this.skillAndTechService.updateSkill(id, updateSkillDto);
   }
 
   @Get('skills')
   @Public()
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Get all skills with technologies',
-    description: 'Get all skills along with all their technologies (public - no authentication required)'
+    description:
+      'Get all skills along with all their technologies (public - no authentication required)',
   })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Return all skills with technologies',
     schema: {
       example: {
@@ -183,12 +181,12 @@ export class SkillAndTechController {
             description: 'Building modern user interfaces',
             technologies: [
               { id: 1, name: 'React', level: 90, skillId: 1 },
-              { id: 2, name: 'Vue.js', level: 75, skillId: 1 }
-            ]
-          }
-        ]
-      }
-    }
+              { id: 2, name: 'Vue.js', level: 75, skillId: 1 },
+            ],
+          },
+        ],
+      },
+    },
   })
   getAllSkills() {
     return this.skillAndTechService.getAllSkills();
@@ -198,12 +196,13 @@ export class SkillAndTechController {
 
   @Get('technologies')
   @Public()
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Get all technologies',
-    description: 'Get all technologies with their associated skills (public - no authentication required)'
+    description:
+      'Get all technologies with their associated skills (public - no authentication required)',
   })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Return all technologies',
     schema: {
       example: {
@@ -215,11 +214,15 @@ export class SkillAndTechController {
             name: 'React',
             level: 90,
             skillId: 1,
-            skill: { id: 1, name: 'Frontend Development', description: 'Building modern user interfaces' }
-          }
-        ]
-      }
-    }
+            skill: {
+              id: 1,
+              name: 'Frontend Development',
+              description: 'Building modern user interfaces',
+            },
+          },
+        ],
+      },
+    },
   })
   getAllTechnologies() {
     return this.skillAndTechService.getAllTechnologies();
@@ -247,8 +250,8 @@ export class SkillAndTechController {
       },
     },
   })
-  @ApiResponse({ 
-    status: 201, 
+  @ApiResponse({
+    status: 201,
     description: 'Technology created successfully',
     schema: {
       example: {
@@ -258,15 +261,20 @@ export class SkillAndTechController {
           id: 1,
           name: 'React',
           level: 90,
-          iconUrl: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/technologies/react-icon.png',
+          iconUrl:
+            'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/technologies/react-icon.png',
           skillId: 1,
-          skill: { id: 1, name: 'Frontend Development', description: 'Building modern user interfaces' }
-        }
-      }
-    }
+          skill: {
+            id: 1,
+            name: 'Frontend Development',
+            description: 'Building modern user interfaces',
+          },
+        },
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 401, 
+  @ApiResponse({
+    status: 401,
     description: 'Unauthorized',
     schema: {
       example: {
@@ -276,12 +284,12 @@ export class SkillAndTechController {
         path: '/skill-and-tech/technologies',
         method: 'POST',
         error: 'Unauthorized',
-        message: 'Unauthorized'
-      }
-    }
+        message: 'Unauthorized',
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 404, 
+  @ApiResponse({
+    status: 404,
     description: 'Skill not found',
     schema: {
       example: {
@@ -291,9 +299,9 @@ export class SkillAndTechController {
         path: '/skill-and-tech/technologies',
         method: 'POST',
         error: 'Not Found',
-        message: 'Skill with ID 1 not found'
-      }
-    }
+        message: 'Skill with ID 1 not found',
+      },
+    },
   })
   createTechnology(
     @Body() createTechnologyDto: CreateTechnologyDto,
@@ -324,8 +332,8 @@ export class SkillAndTechController {
       },
     },
   })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Technology updated successfully',
     schema: {
       example: {
@@ -335,15 +343,20 @@ export class SkillAndTechController {
           id: 1,
           name: 'React',
           level: 95,
-          iconUrl: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/technologies/react-icon.png',
+          iconUrl:
+            'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/technologies/react-icon.png',
           skillId: 1,
-          skill: { id: 1, name: 'Frontend Development', description: 'Building modern user interfaces' }
-        }
-      }
-    }
+          skill: {
+            id: 1,
+            name: 'Frontend Development',
+            description: 'Building modern user interfaces',
+          },
+        },
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 401, 
+  @ApiResponse({
+    status: 401,
     description: 'Unauthorized',
     schema: {
       example: {
@@ -353,12 +366,12 @@ export class SkillAndTechController {
         path: '/skill-and-tech/technologies/1',
         method: 'PATCH',
         error: 'Unauthorized',
-        message: 'Unauthorized'
-      }
-    }
+        message: 'Unauthorized',
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 404, 
+  @ApiResponse({
+    status: 404,
     description: 'Technology or Skill not found',
     schema: {
       example: {
@@ -368,9 +381,9 @@ export class SkillAndTechController {
         path: '/skill-and-tech/technologies/999',
         method: 'PATCH',
         error: 'Not Found',
-        message: 'Technology with ID 999 not found'
-      }
-    }
+        message: 'Technology with ID 999 not found',
+      },
+    },
   })
   updateTechnology(
     @Param('id', ParseIntPipe) id: number,
@@ -385,18 +398,18 @@ export class SkillAndTechController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete a technology' })
   @ApiParam({ name: 'id', description: 'Technology ID' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Technology deleted successfully',
     schema: {
       example: {
         success: true,
-        message: 'Technology deleted successfully'
-      }
-    }
+        message: 'Technology deleted successfully',
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 401, 
+  @ApiResponse({
+    status: 401,
     description: 'Unauthorized',
     schema: {
       example: {
@@ -406,12 +419,12 @@ export class SkillAndTechController {
         path: '/skill-and-tech/technologies/1',
         method: 'DELETE',
         error: 'Unauthorized',
-        message: 'Unauthorized'
-      }
-    }
+        message: 'Unauthorized',
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 404, 
+  @ApiResponse({
+    status: 404,
     description: 'Technology not found',
     schema: {
       example: {
@@ -421,9 +434,9 @@ export class SkillAndTechController {
         path: '/skill-and-tech/technologies/999',
         method: 'DELETE',
         error: 'Not Found',
-        message: 'Technology with ID 999 not found'
-      }
-    }
+        message: 'Technology with ID 999 not found',
+      },
+    },
   })
   deleteTechnology(@Param('id', ParseIntPipe) id: number) {
     return this.skillAndTechService.deleteTechnology(id);

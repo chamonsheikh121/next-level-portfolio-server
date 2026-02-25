@@ -33,11 +33,11 @@ export class UpdateExperienceDto {
   @IsString()
   description?: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     required: false,
     type: [String],
     example: ['Increased performance by 40%', 'Led team of 5 developers'],
-    description: 'Send as JSON array string: ["item1", "item2"] or comma-separated: item1,item2'
+    description: 'Send as JSON array string: ["item1", "item2"] or comma-separated: item1,item2',
   })
   @IsOptional()
   @Transform(({ value }) => {
@@ -50,7 +50,10 @@ export class UpdateExperienceDto {
         return Array.isArray(parsed) ? parsed : [value];
       } catch {
         // If not JSON, split by comma
-        return value.split(',').map(item => item.trim()).filter(Boolean);
+        return value
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean);
       }
     }
     return [value];
@@ -59,11 +62,11 @@ export class UpdateExperienceDto {
   @IsString({ each: true })
   keyAchievements?: string[];
 
-  @ApiProperty({ 
+  @ApiProperty({
     required: false,
     type: [String],
     example: ['React', 'Node.js', 'PostgreSQL'],
-    description: 'Send as JSON array string: ["item1", "item2"] or comma-separated: item1,item2'
+    description: 'Send as JSON array string: ["item1", "item2"] or comma-separated: item1,item2',
   })
   @IsOptional()
   @Transform(({ value }) => {
@@ -76,7 +79,10 @@ export class UpdateExperienceDto {
         return Array.isArray(parsed) ? parsed : [value];
       } catch {
         // If not JSON, split by comma
-        return value.split(',').map(item => item.trim()).filter(Boolean);
+        return value
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean);
       }
     }
     return [value];

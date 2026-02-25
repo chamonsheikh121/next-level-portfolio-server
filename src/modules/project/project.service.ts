@@ -296,7 +296,8 @@ export class ProjectService {
       // Delete image from Cloudinary if it exists
       if (existingProject.imageURL) {
         try {
-          await this.cloudinaryService.deleteFile(existingProject.imageURL);
+          const publicId = this.cloudinaryService.extractPublicId(existingProject.imageURL);
+          await this.cloudinaryService.deleteFile(publicId);
         } catch (error) {
           console.error('Failed to delete image:', error.message);
         }

@@ -93,7 +93,8 @@ export class EducationService {
         // Delete old image from Cloudinary if it exists
         if (existingEducation.imageURL) {
           try {
-            await this.cloudinaryService.deleteFile(existingEducation.imageURL);
+            const publicId = this.cloudinaryService.extractPublicId(existingEducation.imageURL);
+            await this.cloudinaryService.deleteFile(publicId);
           } catch (error) {
             console.error('Failed to delete old image:', error.message);
           }
@@ -128,7 +129,8 @@ export class EducationService {
       // Delete image from Cloudinary if it exists
       if (existingEducation.imageURL) {
         try {
-          await this.cloudinaryService.deleteFile(existingEducation.imageURL);
+          const publicId = this.cloudinaryService.extractPublicId(existingEducation.imageURL);
+          await this.cloudinaryService.deleteFile(publicId);
         } catch (error) {
           console.error('Failed to delete image:', error.message);
         }

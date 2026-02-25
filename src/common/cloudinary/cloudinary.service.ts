@@ -202,7 +202,7 @@ export class CloudinaryService {
         publicIdWithExtension;
 
       return publicId;
-    } catch (error) {
+    } catch {
       throw new BadRequestException('Failed to extract public ID from URL');
     }
   }

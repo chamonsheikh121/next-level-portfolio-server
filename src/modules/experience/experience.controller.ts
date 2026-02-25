@@ -52,23 +52,28 @@ export class ExperienceController {
         company: { type: 'string', example: 'Tech Solutions Inc.' },
         location: { type: 'string', example: 'San Francisco, CA' },
         startingDate: { type: 'string', format: 'date-time', example: '2023-01-15T00:00:00.000Z' },
-        endingDate: { type: 'string', format: 'date-time', example: '2024-12-31T00:00:00.000Z', description: 'Leave empty for current position' },
+        endingDate: {
+          type: 'string',
+          format: 'date-time',
+          example: '2024-12-31T00:00:00.000Z',
+          description: 'Leave empty for current position',
+        },
         description: { type: 'string', example: 'Led development of scalable applications' },
-        keyAchievements: { 
+        keyAchievements: {
           type: 'string',
           example: '["Increased performance by 40%", "Led team of 5 developers"]',
-          description: 'JSON array string or comma-separated values'
+          description: 'JSON array string or comma-separated values',
         },
         technologies: {
           type: 'string',
           example: '["React", "Node.js", "PostgreSQL"]',
-          description: 'JSON array string or comma-separated values'
+          description: 'JSON array string or comma-separated values',
         },
       },
     },
   })
-  @ApiResponse({ 
-    status: 201, 
+  @ApiResponse({
+    status: 201,
     description: 'Experience created successfully',
     schema: {
       example: {
@@ -76,7 +81,8 @@ export class ExperienceController {
         message: 'Experience created successfully',
         data: {
           id: 1,
-          imageURL: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/experiences/logo.png',
+          imageURL:
+            'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/experiences/logo.png',
           title: 'Senior Full Stack Developer',
           company: 'Tech Solutions Inc.',
           location: 'San Francisco, CA',
@@ -84,13 +90,13 @@ export class ExperienceController {
           endingDate: '2024-12-31T00:00:00.000Z',
           description: 'Led development of scalable applications',
           keyAchievements: ['Increased performance by 40%', 'Led team of 5 developers'],
-          technologies: ['React', 'Node.js', 'PostgreSQL']
-        }
-      }
-    }
+          technologies: ['React', 'Node.js', 'PostgreSQL'],
+        },
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 400, 
+  @ApiResponse({
+    status: 400,
     description: 'Bad Request - Invalid input data or file',
     schema: {
       example: {
@@ -100,12 +106,12 @@ export class ExperienceController {
         path: '/experience',
         method: 'POST',
         error: 'Bad Request',
-        message: 'Invalid file type. Only JPEG, PNG, GIF, and WebP images are allowed'
-      }
-    }
+        message: 'Invalid file type. Only JPEG, PNG, GIF, and WebP images are allowed',
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 401, 
+  @ApiResponse({
+    status: 401,
     description: 'Unauthorized - Authentication required',
     schema: {
       example: {
@@ -115,9 +121,9 @@ export class ExperienceController {
         path: '/experience',
         method: 'POST',
         error: 'Unauthorized',
-        message: 'Unauthorized'
-      }
-    }
+        message: 'Unauthorized',
+      },
+    },
   })
   createExperience(
     @Body() createExperienceDto: CreateExperienceDto,
@@ -128,12 +134,13 @@ export class ExperienceController {
 
   @Get()
   @Public()
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Get all experiences',
-    description: 'Get all work experiences ordered by starting date (public - no authentication required)'
+    description:
+      'Get all work experiences ordered by starting date (public - no authentication required)',
   })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Return all experiences',
     schema: {
       example: {
@@ -150,11 +157,11 @@ export class ExperienceController {
             endingDate: null,
             description: 'Led development of scalable applications',
             keyAchievements: ['Increased performance by 40%'],
-            technologies: ['React', 'Node.js']
-          }
-        ]
-      }
-    }
+            technologies: ['React', 'Node.js'],
+          },
+        ],
+      },
+    },
   })
   getAllExperiences() {
     return this.experienceService.getAllExperiences();
@@ -162,13 +169,13 @@ export class ExperienceController {
 
   @Get(':id')
   @Public()
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Get experience by ID',
-    description: 'Get a single experience by its ID (public - no authentication required)'
+    description: 'Get a single experience by its ID (public - no authentication required)',
   })
   @ApiParam({ name: 'id', description: 'Experience ID' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Return experience details',
     schema: {
       example: {
@@ -183,13 +190,13 @@ export class ExperienceController {
           endingDate: null,
           description: 'Led development of scalable applications',
           keyAchievements: ['Increased performance by 40%'],
-          technologies: ['React', 'Node.js']
-        }
-      }
-    }
+          technologies: ['React', 'Node.js'],
+        },
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 404, 
+  @ApiResponse({
+    status: 404,
     description: 'Experience not found',
     schema: {
       example: {
@@ -199,9 +206,9 @@ export class ExperienceController {
         path: '/experience/999',
         method: 'GET',
         error: 'Not Found',
-        message: 'Experience with ID 999 not found'
-      }
-    }
+        message: 'Experience with ID 999 not found',
+      },
+    },
   })
   getExperienceById(@Param('id', ParseIntPipe) id: number) {
     return this.experienceService.getExperienceById(id);
@@ -229,21 +236,21 @@ export class ExperienceController {
         startingDate: { type: 'string', format: 'date-time', example: '2023-01-15T00:00:00.000Z' },
         endingDate: { type: 'string', format: 'date-time', example: '2024-12-31T00:00:00.000Z' },
         description: { type: 'string', example: 'Led development of scalable applications' },
-        keyAchievements: { 
+        keyAchievements: {
           type: 'string',
           example: '["Increased performance by 40%", "Led team of 5 developers"]',
-          description: 'JSON array string or comma-separated values'
+          description: 'JSON array string or comma-separated values',
         },
         technologies: {
           type: 'string',
           example: '["React", "Node.js", "PostgreSQL"]',
-          description: 'JSON array string or comma-separated values'
+          description: 'JSON array string or comma-separated values',
         },
       },
     },
   })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Experience updated successfully',
     schema: {
       example: {
@@ -251,7 +258,8 @@ export class ExperienceController {
         message: 'Experience updated successfully',
         data: {
           id: 1,
-          imageURL: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/experiences/logo.png',
+          imageURL:
+            'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/experiences/logo.png',
           title: 'Lead Full Stack Developer',
           company: 'Tech Solutions Inc.',
           location: 'San Francisco, CA',
@@ -259,13 +267,13 @@ export class ExperienceController {
           endingDate: null,
           description: 'Led development of scalable applications',
           keyAchievements: ['Increased performance by 40%'],
-          technologies: ['React', 'Node.js']
-        }
-      }
-    }
+          technologies: ['React', 'Node.js'],
+        },
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 400, 
+  @ApiResponse({
+    status: 400,
     description: 'Bad Request - Invalid file',
     schema: {
       example: {
@@ -275,12 +283,12 @@ export class ExperienceController {
         path: '/experience/1',
         method: 'PATCH',
         error: 'Bad Request',
-        message: 'Invalid file type. Only JPEG, PNG, GIF, and WebP images are allowed'
-      }
-    }
+        message: 'Invalid file type. Only JPEG, PNG, GIF, and WebP images are allowed',
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 401, 
+  @ApiResponse({
+    status: 401,
     description: 'Unauthorized - Authentication required',
     schema: {
       example: {
@@ -290,12 +298,12 @@ export class ExperienceController {
         path: '/experience/1',
         method: 'PATCH',
         error: 'Unauthorized',
-        message: 'Unauthorized'
-      }
-    }
+        message: 'Unauthorized',
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 404, 
+  @ApiResponse({
+    status: 404,
     description: 'Experience not found',
     schema: {
       example: {
@@ -305,9 +313,9 @@ export class ExperienceController {
         path: '/experience/999',
         method: 'PATCH',
         error: 'Not Found',
-        message: 'Experience with ID 999 not found'
-      }
-    }
+        message: 'Experience with ID 999 not found',
+      },
+    },
   })
   updateExperience(
     @Param('id', ParseIntPipe) id: number,
@@ -322,18 +330,18 @@ export class ExperienceController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete an experience' })
   @ApiParam({ name: 'id', description: 'Experience ID' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Experience deleted successfully',
     schema: {
       example: {
         success: true,
-        message: 'Experience deleted successfully'
-      }
-    }
+        message: 'Experience deleted successfully',
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 401, 
+  @ApiResponse({
+    status: 401,
     description: 'Unauthorized - Authentication required',
     schema: {
       example: {
@@ -343,12 +351,12 @@ export class ExperienceController {
         path: '/experience/1',
         method: 'DELETE',
         error: 'Unauthorized',
-        message: 'Unauthorized'
-      }
-    }
+        message: 'Unauthorized',
+      },
+    },
   })
-  @ApiResponse({ 
-    status: 404, 
+  @ApiResponse({
+    status: 404,
     description: 'Experience not found',
     schema: {
       example: {
@@ -358,9 +366,9 @@ export class ExperienceController {
         path: '/experience/999',
         method: 'DELETE',
         error: 'Not Found',
-        message: 'Experience with ID 999 not found'
-      }
-    }
+        message: 'Experience with ID 999 not found',
+      },
+    },
   })
   deleteExperience(@Param('id', ParseIntPipe) id: number) {
     return this.experienceService.deleteExperience(id);

@@ -230,7 +230,8 @@ export class BlogService {
       // Delete image from Cloudinary if it exists
       if (existingBlog.imageURL) {
         try {
-          await this.cloudinaryService.deleteFile(existingBlog.imageURL);
+          const publicId = this.cloudinaryService.extractPublicId(existingBlog.imageURL);
+          await this.cloudinaryService.deleteFile(publicId);
         } catch (error) {
           console.error('Failed to delete image:', error.message);
         }

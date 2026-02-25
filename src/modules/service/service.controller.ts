@@ -12,7 +12,15 @@ import {
   UploadedFile,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam, ApiConsumes, ApiBody } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiParam,
+  ApiConsumes,
+  ApiBody,
+} from '@nestjs/swagger';
 import { ServiceService } from './service.service';
 import { CreateServiceDto } from './dto/create-service.dto';
 import { UpdateServiceDto } from './dto/update-service.dto';
@@ -63,7 +71,8 @@ export class ServiceController {
         id: 1,
         title: 'Full-Stack Web Development',
         subtitle: 'Building modern, scalable web applications',
-        imageURL: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/services/service.png',
+        imageURL:
+          'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/services/service.png',
         bulletPoints: [
           'Custom web application development',
           'RESTful API design and implementation',
@@ -113,7 +122,8 @@ export class ServiceController {
           id: 1,
           title: 'Full-Stack Web Development',
           subtitle: 'Building modern, scalable web applications',
-          imageURL: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/services/service1.png',
+          imageURL:
+            'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/services/service1.png',
           bulletPoints: [
             'Custom web application development',
             'RESTful API design and implementation',
@@ -127,7 +137,8 @@ export class ServiceController {
           id: 2,
           title: 'Mobile App Development',
           subtitle: 'Native and cross-platform mobile solutions',
-          imageURL: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/services/service2.png',
+          imageURL:
+            'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/services/service2.png',
           bulletPoints: [
             'iOS and Android app development',
             'React Native applications',
@@ -156,7 +167,8 @@ export class ServiceController {
         id: 1,
         title: 'Full-Stack Web Development',
         subtitle: 'Building modern, scalable web applications',
-        imageURL: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/services/service.png',
+        imageURL:
+          'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/services/service.png',
         bulletPoints: [
           'Custom web application development',
           'RESTful API design and implementation',
@@ -221,7 +233,8 @@ export class ServiceController {
         id: 1,
         title: 'Full-Stack Web Development (Updated)',
         subtitle: 'Building modern, scalable web applications with cutting-edge tech',
-        imageURL: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/services/service-updated.png',
+        imageURL:
+          'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/services/service-updated.png',
         bulletPoints: [
           'Custom web application development',
           'RESTful API design and implementation',

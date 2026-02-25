@@ -35,8 +35,8 @@ export class HireService {
         hireRequest.companyName || 'New client',
         hireRequest.budget,
         hireRequest.timeline,
-        hireRequest.coreFeatures || ["new client"],
-        hireRequest.techSuggestion || ["new client"],
+        hireRequest.coreFeatures || ['new client'],
+        hireRequest.techSuggestion || ['new client'],
       );
 
       return {

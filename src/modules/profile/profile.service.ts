@@ -62,7 +62,8 @@ export class ProfileService {
       // Delete old image from Cloudinary if new image is uploaded and old image exists
       if (file && existingProfile.imageURL) {
         try {
-          await this.cloudinaryService.deleteFile(existingProfile.imageURL);
+          const publicId = this.cloudinaryService.extractPublicId(existingProfile.imageURL);
+          await this.cloudinaryService.deleteFile(publicId);
         } catch (error) {
           // Log error but don't fail the update
           console.error('Failed to delete old image from Cloudinary:', error);

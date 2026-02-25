@@ -63,7 +63,8 @@ export class ReviewController {
         id: 1,
         rate: 5,
         comment: 'Excellent work! Very professional and delivered on time.',
-        avatar: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/reviews/avatar.png',
+        avatar:
+          'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/reviews/avatar.png',
         name: 'John Doe',
         subtitle: 'CEO at Tech Company',
       },

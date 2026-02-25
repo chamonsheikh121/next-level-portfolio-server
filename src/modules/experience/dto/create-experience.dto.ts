@@ -23,7 +23,11 @@ export class CreateExperienceDto {
   @IsDateString()
   startingDate: string;
 
-  @ApiProperty({ required: false, example: '2024-12-31T00:00:00.000Z', description: 'Leave empty for current position' })
+  @ApiProperty({
+    required: false,
+    example: '2024-12-31T00:00:00.000Z',
+    description: 'Leave empty for current position',
+  })
   @IsOptional()
   @IsDateString()
   endingDate?: string;
@@ -33,11 +37,11 @@ export class CreateExperienceDto {
   @IsString()
   description?: string;
 
-  @ApiProperty({ 
-    required: false, 
+  @ApiProperty({
+    required: false,
     type: [String],
     example: ['Increased performance by 40%', 'Led team of 5 developers'],
-    description: 'Send as JSON array string: ["item1", "item2"] or comma-separated: item1,item2'
+    description: 'Send as JSON array string: ["item1", "item2"] or comma-separated: item1,item2',
   })
   @IsOptional()
   @Transform(({ value }) => {
@@ -50,7 +54,10 @@ export class CreateExperienceDto {
         return Array.isArray(parsed) ? parsed : [value];
       } catch {
         // If not JSON, split by comma
-        return value.split(',').map(item => item.trim()).filter(Boolean);
+        return value
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean);
       }
     }
     return [value];
@@ -59,11 +66,11 @@ export class CreateExperienceDto {
   @IsString({ each: true })
   keyAchievements?: string[];
 
-  @ApiProperty({ 
+  @ApiProperty({
     required: false,
     type: [String],
     example: ['React', 'Node.js', 'PostgreSQL'],
-    description: 'Send as JSON array string: ["item1", "item2"] or comma-separated: item1,item2'
+    description: 'Send as JSON array string: ["item1", "item2"] or comma-separated: item1,item2',
   })
   @IsOptional()
   @Transform(({ value }) => {
@@ -76,7 +83,10 @@ export class CreateExperienceDto {
         return Array.isArray(parsed) ? parsed : [value];
       } catch {
         // If not JSON, split by comma
-        return value.split(',').map(item => item.trim()).filter(Boolean);
+        return value
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean);
       }
     }
     return [value];

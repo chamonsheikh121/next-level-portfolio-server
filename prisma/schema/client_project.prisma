@@ -1,0 +1,55 @@
+// Client Project Status Enum
+enum ClientProjectStatus {
+    PENDING     @map("Pending")
+    IN_PROGRESS @map("In Progress")
+    DELIVERED   @map("Delivered")
+    OVERDUE     @map("Overdue")
+}
+
+// Client Project Phase Enum
+enum ClientProjectPhase {
+    ANALYSIS     @map("Analysis")
+    UI_UX_DESIGN @map("UI/UX Design")
+    BACKEND      @map("Backend")
+    FRONTEND     @map("Frontend")
+    INTEGRATION  @map("Integration")
+    DEVOPS       @map("DevOps")
+    MAINTENANCE  @map("Maintenance")
+}
+
+// Client Project Category Schema
+model ClientProjectCategory {
+    id          Int      @id @default(autoincrement())
+    name        String
+    description String?
+    color       String // Hex color code like #3b82f6
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    // Relations
+    projects ClientProject[]
+
+    @@map("client_project_categories")
+}
+
+// Client Project Schema
+model ClientProject {
+    id                 Int                 @id @default(autoincrement())
+    projectName        String
+    description        String?             @db.Text
+    clientName         String
+    userEmail          String
+    categoryId         Int
+    status             ClientProjectStatus @default(PENDING)
+    phase              ClientProjectPhase  @default(ANALYSIS)
+    deadline           DateTime
+    budget             Decimal             @db.Decimal(12, 2)
+    projectDetailsLink String? // Optional link to project details
+    createdAt          DateTime            @default(now())
+    updatedAt          DateTime            @updatedAt
+
+    // Relations
+    category ClientProjectCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+    @@map("client_projects")
+}

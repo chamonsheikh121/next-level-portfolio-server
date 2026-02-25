@@ -29,12 +29,9 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'OTP verified, login successful' })
   @ApiResponse({ status: 401, description: 'Invalid OTP' })
   @ApiResponse({ status: 400, description: 'OTP expired' })
-  async verifyOtp(
-    @Body() verifyOtpDto: VerifyOtpDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async verifyOtp(@Body() verifyOtpDto: VerifyOtpDto, @Res({ passthrough: true }) res: Response) {
     const result = await this.authService.verifyOtp(verifyOtpDto);
-    
+
     // Set access token in HTTP-only cookie
     res.cookie('accessToken', result.access_token, {
       httpOnly: true,

@@ -164,7 +164,11 @@ export class SkillAndTechService {
   /**
    * Update a technology
    */
-  async updateTechnology(id: number, updateTechnologyDto: UpdateTechnologyDto, file?: Express.Multer.File) {
+  async updateTechnology(
+    id: number,
+    updateTechnologyDto: UpdateTechnologyDto,
+    file?: Express.Multer.File,
+  ) {
     // Check if technology exists
     const technology = await this.prismaService.client.technology.findUnique({
       where: { id },
@@ -195,7 +199,8 @@ export class SkillAndTechService {
       // Delete old icon from Cloudinary if it exists
       if (technology.iconUrl) {
         try {
-          await this.cloudinaryService.deleteFile(technology.iconUrl);
+          const publicId = this.cloudinaryService.extractPublicId(technology.iconUrl);
+          await this.cloudinaryService.deleteFile(publicId);
         } catch (error) {
           // Log error but don't fail the update
           console.error('Failed to delete old icon from Cloudinary:', error);
@@ -232,6 +237,17 @@ export class SkillAndTechService {
 
     if (!technology) {
       throw new NotFoundException(`Technology with ID ${id} not found`);
+    }
+
+    // Delete icon from Cloudinary if it exists
+    if (technology.iconUrl) {
+      try {
+        const publicId = this.cloudinaryService.extractPublicId(technology.iconUrl);
+        await this.cloudinaryService.deleteFile(publicId);
+      } catch (error) {
+        // Log error but don't fail the deletion
+        console.error('Failed to delete icon from Cloudinary:', error);
+      }
     }
 
     await this.prismaService.client.technology.delete({

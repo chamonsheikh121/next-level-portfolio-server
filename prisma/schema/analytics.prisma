@@ -4,6 +4,9 @@ model Visitor {
     lastVisitAt  DateTime @updatedAt
     userAgent    String?
     ipAddress    String?
+    country      String?
+    region       String?
+    city         String?
 
     pageViews PageView[]
 }

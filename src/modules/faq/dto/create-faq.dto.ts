@@ -13,7 +13,8 @@ export class CreateFaqDto {
 
   @ApiProperty({
     description: 'FAQ answer',
-    example: 'I offer full-stack web development, mobile app development, and UI/UX design services.',
+    example:
+      'I offer full-stack web development, mobile app development, and UI/UX design services.',
   })
   @IsString()
   @IsNotEmpty()

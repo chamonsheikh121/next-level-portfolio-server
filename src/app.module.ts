@@ -21,6 +21,8 @@ import { FaqModule } from './modules/faq/faq.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { UserMessageModule } from './modules/user-message/user-message.module';
 import { HireModule } from './modules/hire/hire.module';
+import { ClientProjectCategoryModule } from './modules/client-project-category/client-project-category.module';
+import { ClientProjectModule } from './modules/client-project/client-project.module';
 // import { DatabaseConfig } from './config/database.config';
 import configuration from './config/configuration';
 import { PrismaModule } from './common/prisma/prisma.module';
@@ -57,6 +59,8 @@ import { JwtService } from '@nestjs/jwt';
     AnalyticsModule,
     UserMessageModule,
     HireModule,
+    ClientProjectCategoryModule,
+    ClientProjectModule,
   ],
   controllers: [AppController],
   providers: [

@@ -72,7 +72,6 @@ export class EducationController {
       required: ['title', 'institution'],
     },
   })
-  
   @ApiResponse({
     status: 201,
     description: 'Education record created successfully',

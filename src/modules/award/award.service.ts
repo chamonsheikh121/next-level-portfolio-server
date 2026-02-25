@@ -91,7 +91,8 @@ export class AwardService {
         // Delete old image from Cloudinary if it exists
         if (existingAward.imageURL) {
           try {
-            await this.cloudinaryService.deleteFile(existingAward.imageURL);
+            const publicId = this.cloudinaryService.extractPublicId(existingAward.imageURL);
+            await this.cloudinaryService.deleteFile(publicId);
           } catch (error) {
             console.error('Failed to delete old image:', error.message);
           }
@@ -124,7 +125,8 @@ export class AwardService {
       // Delete image from Cloudinary if it exists
       if (existingAward.imageURL) {
         try {
-          await this.cloudinaryService.deleteFile(existingAward.imageURL);
+          const publicId = this.cloudinaryService.extractPublicId(existingAward.imageURL);
+          await this.cloudinaryService.deleteFile(publicId);
         } catch (error) {
           console.error('Failed to delete image:', error.message);
         }

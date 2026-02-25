@@ -14,7 +14,12 @@ export class UpdateTechnologyDto {
   @Max(100)
   level?: number;
 
-  @ApiProperty({ required: false, example: 'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/technologies/react-icon.png', description: 'URL of the technology icon (automatically set when uploading file)' })
+  @ApiProperty({
+    required: false,
+    example:
+      'https://res.cloudinary.com/demo/image/upload/v1234567890/portfolio/technologies/react-icon.png',
+    description: 'URL of the technology icon (automatically set when uploading file)',
+  })
   @IsOptional()
   @IsString()
   iconUrl?: string;

@@ -28,7 +28,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       status = exception.getStatus();
       const exceptionResponse = exception.getResponse();
-      
+
       if (typeof exceptionResponse === 'string') {
         message = exceptionResponse;
         error = exceptionResponse;
@@ -40,10 +40,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     } else if (exception instanceof Error) {
       message = exception.message;
       error = exception.name;
-      this.logger.error(
-        `Unhandled error: ${exception.message}`,
-        exception.stack,
-      );
+      this.logger.error(`Unhandled error: ${exception.message}`, exception.stack);
     }
 
     const errorResponse = {
@@ -63,10 +60,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         JSON.stringify(errorResponse),
       );
     } else {
-      this.logger.warn(
-        `${request.method} ${request.url} - ${status}`,
-        JSON.stringify(message),
-      );
+      this.logger.warn(`${request.method} ${request.url} - ${status}`, JSON.stringify(message));
     }
 
     response.status(status).json(errorResponse);

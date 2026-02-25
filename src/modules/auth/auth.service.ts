@@ -27,10 +27,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const isPasswordValid = await bcrypt.compare(
-      loginDto.password,
-      user.password,
-    );
+    const isPasswordValid = await bcrypt.compare(loginDto.password, user.password);
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
@@ -151,7 +148,8 @@ export class AuthService {
    * Remove sensitive information from user object
    */
   private sanitizeUser(user: any) {
-    const { password, otp, otpExpiry, ...result } = user;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _password, otp: _otp, otpExpiry: _otpExpiry, ...result } = user;
     return result;
   }
 }
